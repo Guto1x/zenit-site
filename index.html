@@ -3,176 +3,248 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Zenit | Estrutura digital para o seu negócio crescer</title>
-  <meta name="description" content="A Zenit cria a estrutura digital completa da sua empresa e acompanha o desenvolvimento: sites, one page, e-commerce, SEO local, tráfego pago e automações." />
-  <meta property="og:title" content="Zenit | Estrutura digital e acompanhamento" />
-  <meta property="og:description" content="Sites, e-commerce, SEO local, tráfego pago e automações — com acompanhamento de perto." />
+  <title>ZENIT | Estrutura digital</title>
+  <meta name="description" content="A ZENIT monta a estrutura digital da sua empresa e acompanha mês a mês: sites, one page, e-commerce, SEO local, tráfego pago e automações." />
+  <meta property="og:title" content="ZENIT | Estrutura digital" />
+  <meta property="og:description" content="Sites, e-commerce, SEO local, tráfego pago e automações, montados juntos e acompanhados mês a mês." />
   <meta property="og:type" content="website" />
-  <meta name="theme-color" content="#020A16" />
   <meta property="og:image" content="assets/brand/zenit-avatar.png" />
+  <meta name="theme-color" content="#020A16" />
   <link rel="icon" href="assets/brand/symbol-mark.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/brand/zenit-avatar.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
   <header class="nav" id="topo">
-    <div class="container nav__inner">
-      <a href="#topo" class="logo" aria-label="ZENIT — início">
-        <img src="assets/brand/wordmark-dark.svg" alt="ZENIT" class="logo__word" />
+    <div class="wrap nav__inner">
+      <a href="#topo" class="nav__logo" aria-label="ZENIT — início">
+        <img src="assets/brand/wordmark-dark.svg" alt="ZENIT" width="110" height="19" />
       </a>
       <nav class="nav__links" aria-label="Principal">
         <a href="#servicos">Serviços</a>
-        <a href="#metodo">Como trabalhamos</a>
-        <a href="#diferenciais">Diferenciais</a>
+        <a href="#metodo">Método</a>
+        <a href="#acompanhamento">Acompanhamento</a>
         <a href="#faq">Dúvidas</a>
+        <a href="#contato" class="nav__cta">Diagnóstico gratuito</a>
       </nav>
-      <a href="#contato" class="btn btn--sm">Fale com a gente</a>
       <button class="nav__toggle" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </header>
 
   <main>
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container hero__inner">
-        <img src="assets/brand/lockup-dark.svg" alt="ZENIT — Estrutura Digital" class="hero__lockup" width="808" height="660" />
-        <h1>A estrutura digital da sua empresa, <span class="gold">montada e acompanhada.</span></h1>
-        <p class="lead">Site, loja virtual, SEO local, tráfego pago e automações, planejados juntos e acompanhados mês a mês.</p>
-        <div class="hero__cta">
-          <a href="#contato" class="btn">Quero um diagnóstico gratuito</a>
-          <a href="#servicos" class="btn btn--ghost">Ver serviços</a>
+    <!-- HERO: fixado; o lockup aproxima até a estrela -->
+    <section class="hero" aria-label="Apresentação">
+      <div class="hero__stage">
+        <div class="hero__sky" aria-hidden="true"></div>
+        <img class="hero__lockup" src="assets/brand/lockup-dark.svg" alt="ZENIT — Estrutura Digital" width="808" height="660" />
+        <div class="wrap hero__copy">
+          <h1 class="hero__title">
+            <span class="line"><span>Estrutura digital</span></span>
+            <span class="line"><span>montada, medida</span></span>
+            <span class="line"><span>e <em>acompanhada.</em></span></span>
+          </h1>
+          <div class="hero__foot">
+            <p class="hero__lead">Site, loja virtual, SEO local, tráfego pago e automações planejados como uma peça só, e ajustados todo mês com você.</p>
+            <div class="hero__actions">
+              <a href="#contato" class="btn">Pedir diagnóstico gratuito</a>
+              <a href="#servicos" class="link-arrow">Ver serviços</a>
+            </div>
+          </div>
         </div>
-        <ul class="hero__tags" aria-label="Principais serviços">
-          <li>SEO local</li><li>Tráfego pago</li><li>Sites &amp; One page</li><li>E-commerce</li><li>Automações</li>
-        </ul>
+        <p class="hero__scroll" aria-hidden="true">Role para subir</p>
       </div>
     </section>
 
-    <!-- SERVIÇOS -->
-    <section class="section" id="servicos">
-      <div class="container">
-        <header class="section__head">
-          <p class="eyebrow">Serviços</p>
-          <h2>Tudo o que sua empresa precisa para vender online</h2>
-          <p>Você não precisa de cinco fornecedores diferentes. Construímos e conectamos cada peça da sua presença digital.</p>
-        </header>
-
-        <div class="grid grid--3">
-          <article class="card reveal">
-            <div class="card__icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
-            <h3>SEO local</h3>
-            <p>Apareça no Google e no Google Maps quando clientes da sua região procurarem pelo que você oferece.</p>
-            <ul class="check"><li>Otimização do Perfil da Empresa no Google</li><li>Palavras-chave locais</li><li>Estratégia de avaliações</li></ul>
-          </article>
-
-          <article class="card reveal">
-            <div class="card__icon"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
-            <h3>Tráfego pago</h3>
-            <p>Campanhas no Google Ads e Meta Ads (Instagram e Facebook) focadas em gerar contatos e vendas reais.</p>
-            <ul class="check"><li>Planejamento e criação de campanhas</li><li>Públicos e remarketing</li><li>Relatórios de resultado</li></ul>
-          </article>
-
-          <article class="card reveal">
-            <div class="card__icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8"/></svg></div>
-            <h3>Desenvolvimento de sites</h3>
-            <p>Sites institucionais rápidos, bonitos e pensados para converter visitantes em clientes.</p>
-            <ul class="check"><li>Design responsivo (celular primeiro)</li><li>Carregamento rápido</li><li>Estrutura pronta para SEO</li></ul>
-          </article>
-
-          <article class="card reveal">
-            <div class="card__icon"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 6h4M9 11h6M9 15h4"/></svg></div>
-            <h3>One page</h3>
-            <p>Página única e objetiva para lançar um produto, captar leads ou apresentar seu negócio rapidamente.</p>
-            <ul class="check"><li>Ideal para campanhas</li><li>Botão direto para WhatsApp</li><li>Entrega ágil</li></ul>
-          </article>
-
-          <article class="card reveal">
-            <div class="card__icon"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/></svg></div>
-            <h3>E-commerce</h3>
-            <p>Loja virtual completa para vender 24 horas por dia, com pagamento, frete e gestão de pedidos.</p>
-            <ul class="check"><li>Catálogo e checkout integrados</li><li>Pix, cartão e boleto</li><li>Cálculo de frete</li></ul>
-          </article>
-
-          <article class="card reveal">
-            <div class="card__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></div>
-            <h3>Automações</h3>
-            <p>Menos trabalho manual: atendimento, follow-up e processos rodando sozinhos enquanto você foca no negócio.</p>
-            <ul class="check"><li>Atendimento no WhatsApp</li><li>Captação e nutrição de leads</li><li>Integrações entre ferramentas</li></ul>
-          </article>
-        </div>
+    <!-- MANIFESTO: palavras acendem com o scroll -->
+    <section class="manifesto">
+      <div class="wrap">
+        <p class="manifesto__text" data-words>A maioria das empresas tem peças soltas: um site que ninguém atualiza, anúncios que ninguém mede, um WhatsApp que responde tarde. A ZENIT junta essas peças numa estrutura só, e volta todo mês para ajustar a direção.</p>
       </div>
     </section>
 
-    <!-- MÉTODO -->
-    <section class="section section--alt" id="metodo">
-      <div class="container">
-        <header class="section__head">
-          <p class="eyebrow">Como trabalhamos</p>
-          <h2>A entrega é o começo. Depois vem o acompanhamento.</h2>
-          <p>Medimos, ajustamos e evoluímos a estrutura junto com você.</p>
-        </header>
+    <!-- SERVIÇOS: lista editorial interativa -->
+    <section class="services" id="servicos">
+      <div class="wrap">
+        <div class="section-top">
+          <h2 class="section-title">Serviços</h2>
+          <p class="section-note">Contrate uma frente ou a estrutura inteira. Abra cada uma para ver o que entra.</p>
+        </div>
 
-        <ol class="steps">
-          <li class="step reveal"><span class="step__n">01</span><h3>Diagnóstico</h3><p>Entendemos seu negócio, seu público e onde estão as oportunidades.</p></li>
-          <li class="step reveal"><span class="step__n">02</span><h3>Estratégia</h3><p>Definimos quais peças da estrutura digital fazem sentido para você agora.</p></li>
-          <li class="step reveal"><span class="step__n">03</span><h3>Construção</h3><p>Desenvolvemos site, loja, campanhas e automações, tudo conectado.</p></li>
-          <li class="step reveal"><span class="step__n">04</span><h3>Acompanhamento</h3><p>Medimos, otimizamos e evoluímos junto com você, mês a mês.</p></li>
+        <ol class="svc">
+          <li class="svc__item">
+            <button class="svc__head" aria-expanded="false">
+              <span class="svc__n">01</span>
+              <span class="svc__name">SEO local</span>
+              <span class="svc__short">Aparecer no Google e no Maps da sua região</span>
+              <span class="svc__plus" aria-hidden="true"></span>
+            </button>
+            <div class="svc__body"><div class="svc__inner">
+              <p class="svc__problem"><strong>O problema</strong> Quem procura pelo seu serviço na sua cidade encontra o concorrente primeiro.</p>
+              <ul><li>Perfil da Empresa no Google completo e otimizado</li><li>Palavras-chave da sua região no site</li><li>Estratégia para conseguir e responder avaliações</li><li>Preparação para aparecer também em respostas de IAs, como ChatGPT e Gemini</li></ul>
+            </div></div>
+          </li>
+          <li class="svc__item">
+            <button class="svc__head" aria-expanded="false">
+              <span class="svc__n">02</span>
+              <span class="svc__name">Tráfego pago</span>
+              <span class="svc__short">Google Ads e Meta Ads medidos por contato</span>
+              <span class="svc__plus" aria-hidden="true"></span>
+            </button>
+            <div class="svc__body"><div class="svc__inner">
+              <p class="svc__problem"><strong>O problema</strong> Muito clique, pouco contato, e ninguém sabe quanto custou cada cliente.</p>
+              <ul><li>Campanhas no Google Ads, Instagram e Facebook</li><li>Públicos por região, interesse e remarketing</li><li>Medição configurada antes de a campanha entrar no ar</li><li>Relatório com custo por contato, em linguagem de dono de negócio</li></ul>
+            </div></div>
+          </li>
+          <li class="svc__item">
+            <button class="svc__head" aria-expanded="false">
+              <span class="svc__n">03</span>
+              <span class="svc__name">Sites</span>
+              <span class="svc__short">Institucionais, rápidos e feitos para converter</span>
+              <span class="svc__plus" aria-hidden="true"></span>
+            </button>
+            <div class="svc__body"><div class="svc__inner">
+              <p class="svc__problem"><strong>O problema</strong> O site existe, mas é lento, não abre bem no celular e não leva ninguém a falar com você.</p>
+              <ul><li>Design próprio, a partir da sua marca</li><li>Pensado primeiro para o celular</li><li>Estrutura pronta para SEO e para medir conversões</li><li>Botões de contato e WhatsApp nos lugares certos</li></ul>
+            </div></div>
+          </li>
+          <li class="svc__item">
+            <button class="svc__head" aria-expanded="false">
+              <span class="svc__n">04</span>
+              <span class="svc__name">One page</span>
+              <span class="svc__short">Uma página, um objetivo</span>
+              <span class="svc__plus" aria-hidden="true"></span>
+            </button>
+            <div class="svc__body"><div class="svc__inner">
+              <p class="svc__problem"><strong>O problema</strong> O anúncio leva para uma página que fala de tudo e não pede nada.</p>
+              <ul><li>Página única focada na oferta da campanha</li><li>Contato direto pelo WhatsApp</li><li>Integrada ao Google Ads e ao Meta Ads</li><li>Ideal para lançamento, evento ou captação</li></ul>
+            </div></div>
+          </li>
+          <li class="svc__item">
+            <button class="svc__head" aria-expanded="false">
+              <span class="svc__n">05</span>
+              <span class="svc__name">E-commerce</span>
+              <span class="svc__short">Loja virtual vendendo 24 horas</span>
+              <span class="svc__plus" aria-hidden="true"></span>
+            </button>
+            <div class="svc__body"><div class="svc__inner">
+              <p class="svc__problem"><strong>O problema</strong> As vendas dependem de responder cada cliente na mão, um por um.</p>
+              <ul><li>Catálogo, carrinho e checkout</li><li>Pix, cartão e boleto</li><li>Cálculo de frete e gestão de pedidos</li><li>Conectada ao tráfego pago e às automações</li></ul>
+            </div></div>
+          </li>
+          <li class="svc__item">
+            <button class="svc__head" aria-expanded="false">
+              <span class="svc__n">06</span>
+              <span class="svc__name">Automações</span>
+              <span class="svc__short">O que é repetitivo roda sozinho</span>
+              <span class="svc__plus" aria-hidden="true"></span>
+            </button>
+            <div class="svc__body"><div class="svc__inner">
+              <p class="svc__problem"><strong>O problema</strong> O contato chega fora do horário e ninguém responde a tempo.</p>
+              <ul><li>Atendimento inicial e triagem no WhatsApp</li><li>Follow-up automático de quem não respondeu</li><li>Integração entre formulário, planilha e CRM</li><li>Automação no repetitivo; o relacionamento continua humano</li></ul>
+            </div></div>
+          </li>
         </ol>
       </div>
     </section>
 
-    <!-- DIFERENCIAIS -->
-    <section class="section" id="diferenciais">
-      <div class="container split">
-        <div>
-          <p class="eyebrow">Por que a ZENIT</p>
-          <h2>Uma única parceira para toda a sua estrutura digital</h2>
-          <p class="muted">Quando site, anúncios, Google e automações conversam entre si, cada real investido rende mais.</p>
-          <a href="#contato" class="btn">Conversar com um especialista</a>
+    <!-- MÉTODO: painéis horizontais fixados -->
+    <section class="method" id="metodo">
+      <div class="method__pin">
+        <div class="wrap method__top">
+          <h2 class="section-title">Método</h2>
+          <p class="section-note">Quatro etapas. A última não termina.</p>
         </div>
-        <ul class="features">
-          <li class="reveal"><strong>Tudo integrado</strong><span>Site, tráfego, SEO e automações planejados juntos, não em pedaços.</span></li>
-          <li class="reveal"><strong>Acompanhamento próximo</strong><span>Contato direto e reuniões de resultado. Você sempre sabe o que está acontecendo.</span></li>
-          <li class="reveal"><strong>Foco em resultado</strong><span>Medimos contatos, vendas e retorno — não só curtidas e visitas.</span></li>
-          <li class="reveal"><strong>Sob medida</strong><span>Soluções do tamanho do seu momento, do primeiro one page à loja completa.</span></li>
-        </ul>
+        <div class="method__viewport">
+          <div class="method__track">
+            <div class="method__line" aria-hidden="true"><span></span></div>
+            <article class="step">
+              <span class="step__n">01</span>
+              <h3>Diagnóstico</h3>
+              <p>Olhamos o que já existe: site, Google, redes, anúncios, atendimento. O que funciona, o que está parado e o que está desconectado.</p>
+            </article>
+            <article class="step">
+              <span class="step__n">02</span>
+              <h3>Direção</h3>
+              <p>Definimos por onde começar e o que medir. Só entra no plano o que faz sentido para o momento do negócio.</p>
+            </article>
+            <article class="step">
+              <span class="step__n">03</span>
+              <h3>Construção</h3>
+              <p>Site, loja, campanhas e automações no ar, conectados entre si e com a medição configurada desde o primeiro dia.</p>
+            </article>
+            <article class="step">
+              <span class="step__n">04</span>
+              <h3>Acompanhamento</h3>
+              <p>Todo mês: o que aconteceu, quanto custou e o que muda. A estrutura evolui com a empresa.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACOMPANHAMENTO: exemplo de relatório -->
+    <section class="report" id="acompanhamento">
+      <div class="wrap report__grid">
+        <div class="report__copy">
+          <h2 class="section-title">O acompanhamento, na prática</h2>
+          <p class="section-note">Todo mês você recebe um resumo curto, sem jargão. É assim que a estrutura deixa de ser um projeto e vira direção.</p>
+          <ul class="report__points">
+            <li>Você fala direto com quem executa</li>
+            <li>Números que viram decisão, não curtidas</li>
+            <li>Cada mudança registrada, com o motivo</li>
+          </ul>
+        </div>
+        <figure class="panel" aria-label="Exemplo de relatório mensal">
+          <figcaption class="panel__head">
+            <span>Relatório mensal</span>
+            <span class="panel__tag">Exemplo ilustrativo</span>
+          </figcaption>
+          <dl class="panel__stats">
+            <div><dt>Contatos recebidos</dt><dd><span data-count="86">86</span></dd></div>
+            <div><dt>Custo por contato</dt><dd>R$&nbsp;<span data-count="14">14</span></dd></div>
+            <div><dt>Ações no Google Maps</dt><dd><span data-count="1240">1240</span></dd></div>
+          </dl>
+          <div class="panel__bars" aria-hidden="true">
+            <span style="--h:38%"></span><span style="--h:52%"></span><span style="--h:47%"></span><span style="--h:61%"></span><span style="--h:58%"></span><span style="--h:72%"></span><span style="--h:69%"></span><span style="--h:84%"></span>
+          </div>
+          <div class="panel__log">
+            <p><b>O que mudamos</b> Pausamos o anúncio de menor retorno e reforçamos a busca local.</p>
+            <p><b>Próximo passo</b> Página de serviço nova para o bairro com mais procura.</p>
+          </div>
+        </figure>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="section section--alt" id="faq">
-      <div class="container container--narrow">
-        <header class="section__head">
-          <p class="eyebrow">Dúvidas frequentes</p>
-          <h2>Perguntas comuns</h2>
-        </header>
-        <div class="faq">
-          <details><summary>Preciso contratar todos os serviços?</summary><p>Não. Fazemos um diagnóstico e indicamos apenas o que faz sentido para o momento do seu negócio. Você pode começar com um serviço e ir crescendo.</p></details>
-          <details><summary>Quanto tempo leva para o site ficar pronto?</summary><p>Um one page costuma ficar pronto em poucos dias. Sites institucionais e e-commerces variam conforme o escopo — o prazo é definido já na proposta.</p></details>
-          <details><summary>O valor investido em anúncios está incluso?</summary><p>Não. A gestão do tráfego é cobrada à parte, e o investimento em mídia é pago diretamente às plataformas (Google e Meta), com total transparência.</p></details>
-          <details><summary>Em quanto tempo vejo resultados com SEO local?</summary><p>As primeiras melhorias costumam aparecer nas primeiras semanas, e o resultado se consolida nos meses seguintes com acompanhamento constante.</p></details>
-          <details><summary>Vocês atendem empresas de qualquer cidade?</summary><p>Sim. Nosso atendimento é 100% digital, então atendemos negócios de todo o Brasil.</p></details>
+    <section class="faq" id="faq">
+      <div class="wrap faq__grid">
+        <h2 class="section-title faq__title">Dúvidas</h2>
+        <div class="faq__list">
+          <details><summary>Preciso contratar todos os serviços?</summary><p>Não. O diagnóstico mostra por onde começar. Dá para começar com uma frente e ir somando.</p></details>
+          <details><summary>Como funciona o diagnóstico gratuito?</summary><p>Você conta um pouco da empresa pelo formulário ou pelo WhatsApp, analisamos sua presença digital atual e apresentamos o que faríamos primeiro. Sem custo e sem compromisso.</p></details>
+          <details><summary>O valor dos anúncios está incluso?</summary><p>Não. A gestão é cobrada à parte e o investimento em mídia é pago direto ao Google e à Meta, com total transparência.</p></details>
+          <details><summary>Tráfego pago ou SEO local: por onde começar?</summary><p>O anúncio traz contato logo, mas para quando a verba para. O SEO demora mais e continua trazendo contato depois. Na maioria dos casos os dois andam juntos; o diagnóstico diz qual vem primeiro.</p></details>
+          <details><summary>Vocês atendem empresas de qualquer cidade?</summary><p>Sim. O trabalho é remoto, com reuniões por vídeo e aprovações online.</p></details>
         </div>
       </div>
     </section>
 
     <!-- CONTATO -->
-    <section class="section cta" id="contato">
-      <div class="container cta__inner">
+    <section class="contact" id="contato">
+      <div class="wrap contact__grid">
         <div>
-          <p class="eyebrow">Vamos começar?</p>
-          <h2>Peça seu diagnóstico digital gratuito</h2>
-          <p class="muted">Conte um pouco sobre sua empresa e retornamos pelo WhatsApp com os próximos passos.</p>
+          <h2 class="contact__title">Vamos alinhar<br />a sua estrutura.</h2>
+          <p class="section-note">Conte um pouco sobre a empresa. Respondemos pelo WhatsApp com os próximos passos.</p>
         </div>
         <form class="form" id="form-contato">
-          <label>Nome<input name="nome" required autocomplete="name" /></label>
-          <label>Empresa<input name="empresa" autocomplete="organization" /></label>
-          <label>Do que você precisa?
+          <label class="field"><span>Nome</span><input name="nome" required autocomplete="name" /></label>
+          <label class="field"><span>Empresa</span><input name="empresa" autocomplete="organization" /></label>
+          <label class="field"><span>Do que você precisa?</span>
             <select name="servico">
-              <option>Ainda não sei — quero um diagnóstico</option>
+              <option>Ainda não sei, quero o diagnóstico</option>
               <option>SEO local</option>
               <option>Tráfego pago</option>
               <option>Site institucional</option>
@@ -181,7 +253,7 @@
               <option>Automações</option>
             </select>
           </label>
-          <label>Mensagem<textarea name="mensagem" rows="3"></textarea></label>
+          <label class="field"><span>Mensagem</span><textarea name="mensagem" rows="3"></textarea></label>
           <button class="btn btn--full" type="submit">Enviar pelo WhatsApp</button>
         </form>
       </div>
@@ -189,23 +261,23 @@
   </main>
 
   <footer class="footer">
-    <div class="container footer__inner">
-      <a href="#topo" class="logo" aria-label="ZENIT — início">
-        <img src="assets/brand/wordmark-dark.svg" alt="ZENIT" class="logo__word" />
-      </a>
+    <div class="wrap footer__row">
       <p class="tagline">Estrutura digital</p>
-      <nav class="footer__links">
+      <nav class="footer__links" aria-label="Contato">
         <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
         <a href="mailto:contato@zenit.com.br">contato@zenit.com.br</a>
       </nav>
-      <p class="footer__copy">© <span id="ano"></span> ZENIT. Todos os direitos reservados.</p>
+      <p class="footer__copy">© <span id="ano"></span> ZENIT</p>
     </div>
+    <div class="footer__giant" aria-hidden="true"><img src="assets/brand/wordmark-dark.svg" alt="" /></div>
   </footer>
 
   <a class="wa-float" href="#contato" aria-label="Falar no WhatsApp">
-    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
   </a>
 
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
   <script src="assets/main.js"></script>
 </body>
 </html>
