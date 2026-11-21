@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 808 656" width="808" height="656">
+<defs>
+<radialGradient id="sdglow"><stop offset="0" stop-color="#DEBA7E" stop-opacity="0.34"></stop><stop offset=".4" stop-color="#DEBA7E" stop-opacity="0.09"></stop><stop offset="1" stop-color="#DEBA7E" stop-opacity="0"></stop></radialGradient>
+<radialGradient id="sdcore"><stop offset="0" stop-color="#FFF6E4" stop-opacity="0.95"></stop><stop offset="1" stop-color="#FFF6E4" stop-opacity="0"></stop></radialGradient>
+<clipPath id="sddome"><rect x="0" y="0" width="808" height="592"></rect></clipPath>
+</defs>
+<g><g clip-path="url(#sddome)" fill="none" stroke="#DEBA7E"><path d="M 104 602 A 300 300 0 0 1 704 602" stroke-width="1.1" stroke-opacity="0.42"></path><path d="M 154 602 A 250 250 0 0 1 654 602" stroke-width="1.1" stroke-opacity="0.35" stroke-dasharray="1.2 5.5" stroke-linecap="round"></path><path d="M 204 602 A 200 200 0 0 1 604 602" stroke-width="1.1" stroke-opacity="0.29"></path><path d="M 254 602 A 150 150 0 0 1 554 602" stroke-width="1.1" stroke-opacity="0.22" stroke-dasharray="1.2 5.5" stroke-linecap="round"></path><path d="M 304 602 A 100 100 0 0 1 504 602" stroke-width="1.1" stroke-opacity="0.16"></path></g><line x1="404" y1="206" x2="404" y2="488" stroke="#DEBA7E" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="0 7.5"></line></g>
+<path d="M 54 602 A 350 350 0 0 1 754 602" fill="none" stroke="#DEBA7E" stroke-width="2" stroke-linecap="round" stroke-dasharray="0 7.2"></path>
+<circle cx="404" cy="252" r="3" fill="#DEBA7E"></circle>
+<circle cx="54" cy="602" r="3" fill="#DEBA7E"></circle>
+<circle cx="754" cy="602" r="3" fill="#DEBA7E"></circle>
+<circle cx="404" cy="130" r="55" fill="url(#sdglow)"></circle>
+<circle cx="404" cy="130" r="12" fill="url(#sdcore)"></circle>
+<path d="M 404 52 L 405.72 125.84 L 414.61 119.39 L 408.16 128.28 L 456 130 L 408.16 131.72 L 414.61 140.61 L 405.72 134.16 L 404 192 L 402.28 134.16 L 393.39 140.61 L 399.84 131.72 L 352 130 L 399.84 128.28 L 393.39 119.39 L 402.28 125.84 Z" fill="#F3DDB0"></path>
+<line x1="54" y1="602" x2="754" y2="602" stroke="#DEBA7E" stroke-width="1.1" stroke-linecap="round"></line>
+</svg>

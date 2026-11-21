@@ -6,4 +6,5 @@ Feito em HTML, CSS e JavaScript puros: não precisa de build. Basta abrir o `ind
 
 ## Antes de publicar
 - `assets/main.js`: troque `WHATSAPP` pelo número real (ex.: `5511999999999`).
+- Identidade visual: segue o design system ZENIT (tokens no topo de `assets/style.css`, logos oficiais em `assets/brand/`).
 - `index.html`: ajuste o e-mail, o Instagram e os textos do FAQ.
