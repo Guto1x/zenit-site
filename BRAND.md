@@ -66,5 +66,5 @@ só entram quando a ZENIT fornecer dados reais.
 - 2026-11-21: design system ZENIT aplicado.
 - 2026-11-21: redesign para tirar a "cara de IA": layout editorial, scroll com fixação,
   revelação de texto, lista de serviços interativa, dourado só na luz e na interação.
-- 2026-11-21: feedback do Gustavo: marca central maior e viva, animação de rolagem que cresce
+- 2026-11-21: feedback de revisão: marca central maior e viva, animação de rolagem que cresce
   (não só diminui), manifesto removido, serviços totalmente visíveis, logo do rodapé inteiro.
