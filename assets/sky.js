@@ -1,20 +1,21 @@
 /* Céu da ZENIT — leia BRAND.md antes de mudar.
 
-   Abertura, em uma cena só (~4 s, pulável):
+   Abertura (~5 s, pulável):
    1. Céu de estrelas desenhado no navegador.
-   2. A constelação de Sagitário (estrelas reais, posições do céu) se desenha atrás do logo,
-      com as linhas pontilhadas da marca, o arco e a flecha. A figura está girada para a
-      flecha mirar o zênite.
-   3. A flecha dispara até a estrela do zênite; a constelação explode e os mesmos pontos
-      formam o lockup (forma tirada do próprio SVG oficial da página, nas cores dele).
-   4. O arquivo oficial entra nítido. Depois o céu só respira: o mouse afasta estrelas
-      e um toque solta um pulso de sonar. */
+   2. As estrelas convergem e formam o centauro de Sagitário (assets/centauro.js: ~14 mil pontos
+      tirados de uma imagem; mais brilho = mais estrelas, o que dá o sombreado), com halo suave e
+      estrelas brilhantes nos pontos-chave. O centauro é posicionado para a linha da flecha apontar
+      para a estrela do zênite do logo.
+   3. A flecha dispara até o zênite; clarão; o centauro explode e parte das estrelas forma o lockup
+      (forma tirada do próprio SVG oficial, nas cores dele). Entra o arquivo oficial, nítido.
+   4. Depois o céu respira: o mouse afasta e acende estrelas; um clique/toque abre círculos. */
 (() => {
   const root = document.documentElement;
   const done = () => root.classList.add("sky-done");
   const stage = document.querySelector(".hero__stage");
   const canvas = document.querySelector(".hero__sky-canvas");
   const svgEl = document.querySelector(".hero__svg");
+  const DATA = window.ZENIT_CENTAURO;
   if (!stage || !canvas || !svgEl || !canvas.getContext) return done();
 
   const ctx = canvas.getContext("2d");
@@ -23,91 +24,22 @@
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
   const INK = "241,241,241";
   const GOLD = "222,186,126";
-  const LIGHT = "243,221,176"; // dourado-luz da estrela da marca
-
-  // Linha do tempo da abertura (ms desde o início)
-  const T = { draw: 250, fire: 1950, explode: 2280, burst: 300 };
+  const LIGHT = "243,221,176";
+  const ZV = 130 / 659.75; // a estrela do zênite no lockup
+  const BLOOM = 4; // camada de halo em 1/4 da resolução
 
   let W = 0, H = 0, small = false;
-  let stars = [], form = [], pulses = [], cons = null;
-  let phase = "intro"; // intro → reveal → done
-  let t0 = 0, revealAt = 0, endAt = 0;
+  let stars = [], pulses = [], run = null;
   let raf = 0, onScreen = true;
   const pointer = { x: -1e4, y: -1e4, on: false };
+  const bloom = document.createElement("canvas"), bctx = bloom.getContext("2d");
 
   const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
-  const easeOutExpo = (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
-  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+  const eOutExpo = (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
+  const eOutCubic = (t) => 1 - Math.pow(1 - t, 3);
   const rand = (a, b) => a + Math.random() * (b - a);
 
-  /* ---------- Sagitário ----------
-     Estrelas principais (J2000): RA em horas, Dec em graus, magnitude. Projeção simples em
-     torno de RA 18h45m / Dec -27°, norte para cima, leste à esquerda (como se vê no céu). */
-  const SGR = {
-    gam: [18.0967, -30.42, 3.0], del: [18.35, -29.83, 2.7], eps: [18.4028, -34.38, 1.8],
-    lam: [18.4661, -25.42, 2.8], phi: [18.7608, -26.99, 3.2], sig: [18.9211, -26.3, 2.0],
-    tau: [19.1156, -27.67, 3.3], zet: [19.0436, -29.88, 2.6], eta: [18.2939, -36.76, 3.1],
-    mu: [18.2294, -21.06, 3.8], xi: [18.9622, -21.11, 3.5], omi: [19.0781, -21.74, 3.8],
-    pi: [19.1628, -21.02, 2.9], rho: [19.3611, -17.85, 3.9],
-  };
-  // Linhas: a "chaleira" e as extensões do arqueiro
-  const SGR_LINES = [
-    ["gam", "del"], ["gam", "eps"], ["del", "eps"], ["eps", "zet"], ["zet", "phi"], ["phi", "del"],
-    ["del", "lam"], ["lam", "phi"], ["phi", "sig"], ["sig", "tau"], ["tau", "zet"], ["zet", "sig"],
-    ["lam", "mu"], ["sig", "xi"], ["xi", "omi"], ["omi", "pi"], ["pi", "rho"], ["eps", "eta"],
-  ];
-
-  // Monta a figura em coordenadas do logo (u,v = fração da largura/altura do SVG)
-  function buildConstellation() {
-    const aspect = 808 / 659.75;
-    const proj = (k) => {
-      const [ra, dec] = SGR[k];
-      return [-(ra * 15 - 281.25) * 0.891, -(dec + 27)];
-    };
-    const P = {};
-    Object.keys(SGR).forEach((k) => (P[k] = proj(k)));
-    // flecha: do "nock" (φ) passando pelo arco (δ) até a ponta, além de γ (Alnasl, "a ponta da flecha")
-    const tipRaw = [P.gam[0] + (P.gam[0] - P.del[0]) * 0.35, P.gam[1] + (P.gam[1] - P.del[1]) * 0.35];
-    // gira a figura para a flecha apontar para cima (o zênite)
-    const dir = Math.atan2(P.gam[1] - P.del[1], P.gam[0] - P.del[0]);
-    const th = -Math.PI / 2 - dir, c = Math.cos(th), s = Math.sin(th);
-    const rot = ([x, y]) => [x * c - y * s, x * s + y * c];
-    const tip = rot(tipRaw);
-    const S = 0.0425; // unidades do céu → fração da altura do logo
-    const ZV = 130 / 659.75; // a estrela do zênite no lockup
-    const toUV = (xy) => {
-      const [x, y] = rot(xy);
-      return [0.5 + ((x - tip[0]) * S) / aspect, ZV + 0.27 + (y - tip[1]) * S];
-    };
-    const star = {};
-    Object.keys(SGR).forEach((k) => (star[k] = { uv: toUV(P[k]), mag: SGR[k][2] }));
-    const uv = (k) => star[k].uv;
-
-    // caminhos (cada um é uma lista de pontos uv), na ordem em que serão desenhados
-    const paths = SGR_LINES.map(([a, b]) => [uv(a), uv(b)]);
-    // o arco: curva de λ a ε, abaulada para o lado da ponta da flecha
-    const bow = [];
-    const bl = P.lam, be = P.eps;
-    const mid = [(bl[0] + be[0]) / 2, (bl[1] + be[1]) / 2];
-    const ax = P.gam[0] - P.del[0], ay = P.gam[1] - P.del[1], an = Math.hypot(ax, ay);
-    const ctrl = [mid[0] + (ax / an) * 3.6, mid[1] + (ay / an) * 3.6];
-    for (let i = 0; i <= 24; i++) {
-      const t = i / 24, mt = 1 - t;
-      bow.push(toUV([mt * mt * bl[0] + 2 * mt * t * ctrl[0] + t * t * be[0], mt * mt * bl[1] + 2 * mt * t * ctrl[1] + t * t * be[1]]));
-    }
-    paths.push(bow);
-    // a flecha e a ponta
-    const tipUV = toUV(tipRaw);
-    const back = toUV([P.phi[0] - ax / an * 1.2, P.phi[1] - ay / an * 1.2]);
-    paths.push([back, tipUV]);
-    const hb = 0.6, hw = 0.55; // ponta: duas farpas
-    const bx = tipRaw[0] - (ax / an) * hb, by = tipRaw[1] - (ay / an) * hb;
-    paths.push([toUV([bx - (ay / an) * hw, by + (ax / an) * hw]), tipUV, toUV([bx + (ay / an) * hw, by - (ax / an) * hw])]);
-
-    return { star, paths, tip: tipUV, zenith: [0.5, ZV] };
-  }
-
-  /* ---------- Tamanho e estrelas de fundo ---------- */
+  /* ---------- Tamanho e céu de fundo ---------- */
   function size() {
     W = stage.clientWidth;
     H = stage.clientHeight;
@@ -115,10 +47,11 @@
     canvas.width = Math.round(W * DPR);
     canvas.height = Math.round(H * DPR);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    bloom.width = Math.ceil(W / BLOOM);
+    bloom.height = Math.ceil(H / BLOOM);
   }
 
-  // Céu denso: muitas estrelas pequenas, algumas maiores e poucas cintilantes (brilho + cruz),
-  // para o mouse ter o que afastar e o efeito ser percebido
+  // Céu denso: muitas estrelas pequenas, algumas maiores e poucas cintilantes (só brilho)
   function makeStars() {
     const n = Math.max(500, Math.min(small ? 900 : 2400, Math.round((W * H) / 600)));
     const nShine = small ? 22 : 54;
@@ -139,23 +72,54 @@
     });
   }
 
-  // Sprite da estrela cintilante: só o brilho (sem cruz), com um núcleo de luz; desenhado uma vez
-  const shineSprite = (() => {
-    const c = document.createElement("canvas"), R = 32;
+  // Sprites desenhados uma vez: brilho dourado (estrelas cintilantes) e brilho branco (contas do centauro)
+  const sprite = (stops, R) => {
+    const c = document.createElement("canvas");
     c.width = c.height = R * 2;
-    const g = c.getContext("2d");
-    const grd = g.createRadialGradient(R, R, 0, R, R, R);
-    grd.addColorStop(0, `rgba(${LIGHT},1)`);
-    grd.addColorStop(0.07, `rgba(${LIGHT},0.85)`);
-    grd.addColorStop(0.2, `rgba(${GOLD},0.3)`);
-    grd.addColorStop(0.5, `rgba(${GOLD},0.08)`);
-    grd.addColorStop(1, `rgba(${GOLD},0)`);
+    const g = c.getContext("2d"), grd = g.createRadialGradient(R, R, 0, R, R, R);
+    stops.forEach(([o, col]) => grd.addColorStop(o, col));
     g.fillStyle = grd;
     g.fillRect(0, 0, R * 2, R * 2);
     return c;
-  })();
+  };
+  const shineSprite = sprite([[0, `rgba(${LIGHT},1)`], [0.07, `rgba(${LIGHT},0.85)`], [0.2, `rgba(${GOLD},0.3)`], [0.5, `rgba(${GOLD},0.08)`], [1, `rgba(${GOLD},0)`]], 32);
+  const softSprite = sprite([[0, `rgba(${INK},0.55)`], [0.35, `rgba(${INK},0.12)`], [1, `rgba(${INK},0)`]], 16);
 
-  /* ---------- Alvos: pontos tirados do próprio SVG oficial ---------- */
+  function drawSky(t) {
+    // o mouse abre um vão no céu e acende as estrelas em volta
+    const R = small ? 0 : 170, PUSH = 46;
+    const shines = [];
+    for (const pass of [INK, GOLD]) {
+      ctx.fillStyle = `rgb(${pass})`;
+      for (const s of stars) {
+        if ((pass === GOLD) !== s.gold) continue;
+        const bx = s.nx * W, by = s.ny * H;
+        let tx = 0, ty = 0, near = 0;
+        if (pointer.on) {
+          const dx = bx - pointer.x, dy = by - pointer.y, dd = Math.hypot(dx, dy);
+          if (dd < R && dd > 0.1) {
+            near = 1 - dd / R;
+            const push = near * near * PUSH;
+            tx = (dx / dd) * push; ty = (dy / dd) * push;
+          }
+        }
+        s.ox += (tx - s.ox) * 0.09;
+        s.oy += (ty - s.oy) * 0.09;
+        const a = Math.min(1, s.a * (0.62 + 0.38 * Math.sin(t * s.sp + s.ph)) + near * 0.55);
+        if (s.shine) { shines.push([bx + s.ox, by + s.oy, s.r, a, near]); continue; }
+        ctx.globalAlpha = a;
+        const r = s.r * (1 + near * 0.6);
+        ctx.fillRect(bx + s.ox - r / 2, by + s.oy - r / 2, r, r);
+      }
+    }
+    for (const [x, y, r, a, near] of shines) {
+      const sz = (10 + r * 9) * (1 + near * 0.35);
+      ctx.globalAlpha = a * 0.9;
+      ctx.drawImage(shineSprite, x - sz / 2, y - sz / 2, sz, sz);
+    }
+  }
+
+  /* ---------- Alvos do logo: pontos tirados do próprio SVG oficial ---------- */
   function sampleLockup() {
     return new Promise((resolve) => {
       const r = svgEl.getBoundingClientRect();
@@ -194,7 +158,7 @@
               pts.push({ u: cand[j] / c.width, v: cand[j + 1] / c.height, a: Math.max(0.35, cand[j + 2] / 255), c: `${cand[j + 3]},${cand[j + 4]},${cand[j + 5]}` });
             }
           }
-          resolve({ pts, lw: r.width, lh: r.height });
+          resolve(pts);
         } catch (e) {
           resolve(null);
         }
@@ -204,205 +168,190 @@
     });
   }
 
-  /* ---------- Partículas: nascem como contas nas linhas da constelação ---------- */
-  function makeForm({ pts, lw, lh }) {
-    cons = buildConstellation();
-    // contas regulares ao longo de cada caminho (como colar de pontos), com o tempo em que cada uma aparece
-    const beads = [];
-    const nLines = SGR_LINES.length;
-    const gapFor = (pi) => (pi < nLines ? (small ? 5 : 5.5) : (small ? 2.6 : 3)); // arco e flecha mais densos
-    let tStart = T.draw;
-    cons.paths.forEach((path, pi) => {
-      let len = 0;
-      const segs = [];
-      for (let i = 1; i < path.length; i++) {
-        const dx = (path[i][0] - path[i - 1][0]) * lw, dy = (path[i][1] - path[i - 1][1]) * lh;
-        const l = Math.hypot(dx, dy);
-        segs.push([path[i - 1], path[i], l]);
-        len += l;
-      }
-      const dur = pi < nLines ? Math.max(140, len * 1.0) : Math.max(260, len * 1.6); // arco e flecha: traço mais lento
-      let acc = 0;
-      segs.forEach(([a, b, l]) => {
-        for (let s = 0; s < l; s += gapFor(pi)) {
-          const t = s / l;
-          beads.push({ u: a[0] + (b[0] - a[0]) * t, v: a[1] + (b[1] - a[1]) * t, rev: tStart + ((acc + s) / len) * dur, arrow: pi >= cons.paths.length - 2, figure: pi >= nLines });
-        }
-        acc += l;
-      });
-      tStart += pi < nLines ? 48 : 150; // linhas em cascata; arco e flecha por último
-    });
-    // centro da figura, para a direção da explosão
-    let cu = 0, cv = 0;
-    beads.forEach((b) => { cu += b.u; cv += b.v; });
-    cu /= beads.length; cv /= beads.length;
-    const zu = cons.zenith[0], zv = cons.zenith[1];
-    let maxD = 1e-6;
-    pts.forEach((p) => (maxD = Math.max(maxD, Math.hypot(p.u - zu, (p.v - zv) / 1.22))));
+  /* ---------- Onde o centauro fica: a linha da flecha aponta para a estrela do zênite ---------- */
+  const TIP = DATA ? DATA.tip.map((v) => v / 1000) : [0, 0];
+  const NOCK = DATA ? DATA.nock.map((v) => v / 1000) : [0, 0];
+  const AL = Math.hypot(TIP[0] - NOCK[0], TIP[1] - NOCK[1]) || 1;
+  const ADX = (TIP[0] - NOCK[0]) / AL, ADY = (TIP[1] - NOCK[1]) / AL;
 
-    form = pts.map((p, i) => {
-      const b = beads[i % beads.length];
-      const du = (b.u - cu) * lw, dv = (b.v - cv) * lh, dn = Math.hypot(du, dv) || 1;
-      const power = rand(40, small ? 110 : 160);
-      return {
-        su: b.u, sv: b.v, rev: b.rev, arrow: b.arrow, figure: b.figure,
-        jx: rand(-0.7, 0.7), jy: rand(-0.7, 0.7), ph: rand(0, Math.PI * 2),
-        bx: (du / dn) * power + rand(-25, 25), by: (dv / dn) * power + rand(-25, 25),
-        u: p.u, v: p.v, a: p.a, c: p.c,
-        d: (Math.hypot(p.u - zu, (p.v - zv) / 1.22) / maxD) * 300 + rand(0, 120),
-        dur: rand(750, 1000), curve: rand(-40, 40),
-        gold: Math.random() < 0.3,
-      };
-    });
-    endAt = T.explode + 180 + Math.max(...form.map((p) => p.d + p.dur));
+  function placement() {
+    const sr = stage.getBoundingClientRect(), lr = svgEl.getBoundingClientRect();
+    const zx = lr.left - sr.left + 0.5 * lr.width, zy = lr.top - sr.top + ZV * lr.height;
+    const FLY = 0.16, BOTTOM = 0.95, LEFT = 0.19;
+    const sBottom = (H - 16 - zy) / (BOTTOM - TIP[1] + FLY * ADY);
+    const sLeft = (zx - 8) / (FLY * ADX + TIP[0] - LEFT);
+    let s = Math.min(sBottom, sLeft, 760), left, top;
+    if (s < 0.8 * Math.min(W, sBottom)) {
+      // tela estreita: centraliza o centauro; a flecha voa em linha reta até o zênite
+      s = Math.min(W * 0.98, (H - 46 - zy) / (BOTTOM - TIP[1]), 760);
+      left = W / 2 - 0.52 * s;
+      top = zy + 30 - TIP[1] * s;
+    } else {
+      left = zx - FLY * s * ADX - TIP[0] * s;
+      top = zy - FLY * s * ADY - TIP[1] * s;
+    }
+    return {
+      zx, zy, X: (u) => left + u * s, Y: (v) => top + v * s, tip: [left + TIP[0] * s, top + TIP[1] * s],
+      lx: lr.left - sr.left, ly: lr.top - sr.top, lw: lr.width, lh: lr.height,
+    };
   }
 
-  /* ---------- Desenho das estrelas da constelação (brilho + cruz, como a estrela da marca) ---------- */
-  function sparkle(x, y, r, a) {
-    if (a <= 0.01) return;
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r * 4);
-    g.addColorStop(0, `rgba(${LIGHT},${0.55 * a})`);
-    g.addColorStop(0.35, `rgba(${GOLD},${0.14 * a})`);
-    g.addColorStop(1, `rgba(${GOLD},0)`);
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(x, y, r * 4, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = a;
-    ctx.fillStyle = `rgb(${LIGHT})`;
-    ctx.fillRect(x - r * 2.6, y - 0.5, r * 5.2, 1);   // cruz: braço horizontal
-    ctx.fillRect(x - 0.5, y - r * 3.2, 1, r * 6.4);   // braço vertical, mais longo (como no logo)
-    ctx.beginPath(); ctx.arc(x, y, Math.max(1, r * 0.7), 0, Math.PI * 2); ctx.fill();
+  /* ---------- Montagem da cena ---------- */
+  function setup(logo) {
+    const step = small ? 2 : 1; // no celular, metade dos pontos
+    const fig = [];
+    const P = DATA.pts;
+    for (let i = 0; i < P.length; i += 3 * step) {
+      fig.push({
+        u: P[i] / 1000, v: P[i + 1] / 1000, b: P[i + 2] / 255,
+        ph: rand(0, Math.PI * 2), sp: rand(1.2, 2.6),
+        // convergência: cada estrela parte de um ponto do céu
+        t: rand(150, 900), dur: rand(1100, 1600), sx: rand(0, W), sy: Math.pow(Math.random(), 1.2) * H,
+      });
+    }
+    const revealEnd = Math.max(...fig.map((p) => p.t + p.dur));
+    const flares = DATA.flare.map(([x, y], i) => ({ u: x / 1000, v: y / 1000, t: revealEnd - 500 + i * 70, r: i === 1 ? 1.4 : rand(0.8, 1.2) }));
+    const fire = revealEnd + 450, explode = fire + 380;
+    // cada alvo do logo nasce de uma estrela do centauro; as demais se espalham e se apagam
+    const order = fig.map((_, i) => i).sort(() => Math.random() - 0.5);
+    let maxD = 1e-6;
+    logo.forEach((q) => (maxD = Math.max(maxD, Math.hypot(q.u - 0.5, (q.v - ZV) / 1.22))));
+    logo.forEach((q, j) => {
+      const p = fig[order[j % fig.length]];
+      p.target = q;
+      p.d = (Math.hypot(q.u - 0.5, (q.v - ZV) / 1.22) / maxD) * 300 + rand(0, 120);
+      p.tdur = rand(750, 1000);
+      p.curve = rand(-40, 40);
+    });
+    let cx = 0, cy = 0;
+    fig.forEach((p) => { cx += p.u; cy += p.v; });
+    cx /= fig.length; cy /= fig.length;
+    fig.forEach((p) => {
+      const ex = p.u - cx, ey = p.v - cy, en = Math.hypot(ex, ey) || 1, pw = rand(30, small ? 90 : 150);
+      p.bx = (ex / en) * pw + rand(-20, 20);
+      p.by = (ey / en) * pw + rand(-20, 20);
+    });
+    const endAt = explode + 180 + Math.max(...fig.filter((p) => p.target).map((p) => p.d + p.tdur));
+    return { fig, flares, fire, explode, endAt, phase: "intro", revealAt: 0, t0: 0 };
   }
 
   /* ---------- Fim da cena: entra o logo oficial ---------- */
   function reveal(now, quick) {
-    if (phase !== "intro") return;
-    phase = "reveal";
-    revealAt = now;
-    if (quick) t0 = now - endAt; // pula direto para o fim
+    if (!run || run.phase !== "intro") return;
+    run.phase = "reveal";
+    run.revealAt = now;
+    if (quick) run.t0 = now - run.endAt; // pula direto para o fim
     done();
   }
-  const skip = () => reveal(performance.now(), true);
+  const skip = () => {
+    if (run) reveal(performance.now(), true);
+    else done();
+  };
 
   /* ---------- Quadro ---------- */
   function frame(now) {
     raf = requestAnimationFrame(frame);
     const t = now / 1000;
     ctx.clearRect(0, 0, W, H);
+    drawSky(t);
 
-    // estrelas de fundo: o mouse abre um vão no céu e acende as estrelas em volta
-    const R = small ? 0 : 170, PUSH = 46;
-    const shines = [];
-    for (const pass of [INK, GOLD]) {
-      ctx.fillStyle = `rgb(${pass})`;
-      for (const s of stars) {
-        if ((pass === GOLD) !== s.gold) continue;
-        const bx = s.nx * W, by = s.ny * H;
-        let tx = 0, ty = 0, near = 0;
-        if (pointer.on) {
-          const dx = bx - pointer.x, dy = by - pointer.y, dd = Math.hypot(dx, dy);
-          if (dd < R && dd > 0.1) {
-            near = 1 - dd / R;
-            const push = near * near * PUSH;
-            tx = (dx / dd) * push; ty = (dy / dd) * push;
+    if (run) {
+      const el = now - run.t0, P = placement();
+      const exploded = el >= run.explode, fired = el >= run.fire;
+      const LX = (u) => P.lx + u * P.lw, LY = (v) => P.ly + v * P.lh;
+
+      if (!exploded) {
+        // o centauro: contas claras com halo; a sombra vem da densidade
+        bctx.clearRect(0, 0, bloom.width, bloom.height);
+        bctx.fillStyle = `rgb(${INK})`;
+        for (const p of run.fig) {
+          const k = clamp01((el - p.t) / p.dur);
+          if (k <= 0) continue;
+          const e = eOutExpo(k);
+          const x = p.sx + (P.X(p.u) - p.sx) * e, y = p.sy + (P.Y(p.v) - p.sy) * e;
+          const r = 0.7 + p.b;
+          const alpha = (0.35 + 0.65 * e) * (0.3 + 0.7 * p.b) * (0.82 + 0.18 * Math.sin(t * p.sp + p.ph));
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = `rgb(${p.b > 0.82 ? LIGHT : INK})`;
+          ctx.fillRect(x - r / 2, y - r / 2, r, r);
+          bctx.globalAlpha = alpha * 0.5;
+          bctx.fillRect(x / BLOOM - 0.5, y / BLOOM - 0.5, 1, 1);
+          if (p.b > 0.72) {
+            const sz = 4 + p.b * 6;
+            ctx.globalAlpha = alpha * 0.7;
+            ctx.drawImage(softSprite, x - sz / 2, y - sz / 2, sz, sz);
           }
         }
-        s.ox += (tx - s.ox) * 0.09;
-        s.oy += (ty - s.oy) * 0.09;
-        const a = Math.min(1, s.a * (0.62 + 0.38 * Math.sin(t * s.sp + s.ph)) + near * 0.55);
-        if (s.shine) { shines.push([bx + s.ox, by + s.oy, s.r, a, near]); continue; }
-        ctx.globalAlpha = a;
-        const r = s.r * (1 + near * 0.6);
-        ctx.fillRect(bx + s.ox - r / 2, by + s.oy - r / 2, r, r);
-      }
-    }
-    for (const [x, y, r, a, near] of shines) {
-      const sz = (10 + r * 9) * (1 + near * 0.35);
-      ctx.globalAlpha = a * 0.9;
-      ctx.drawImage(shineSprite, x - sz / 2, y - sz / 2, sz, sz);
-    }
-
-    if (form.length) {
-      const el = now - t0;
-      const sr = stage.getBoundingClientRect(), lr = svgEl.getBoundingClientRect();
-      const ox = lr.left - sr.left, oy = lr.top - sr.top, lw = lr.width, lh = lr.height;
-      const X = (u) => ox + u * lw, Y = (v) => oy + v * lh;
-      const fade = phase === "reveal" ? 1 - clamp01((now - revealAt) / 520) : 1;
-      const exploded = el >= T.explode;
-      const fired = el >= T.fire;
-
-      // partículas
-      for (const p of form) {
-        let x, y, alpha, col;
-        if (!exploded) {
-          if (el < p.rev || (fired && p.arrow)) continue; // a flecha some ao disparar
-          const k = clamp01((el - p.rev) / 220);
-          x = X(p.su) + p.jx; y = Y(p.sv) + p.jy;
-          // o arqueiro (arco e flecha) em dourado-luz; as linhas da constelação, discretas
-          alpha = p.figure ? k * (0.75 + 0.2 * Math.sin(t * 3 + p.ph)) : k * (0.32 + 0.2 * Math.sin(t * 3 + p.ph));
-          col = p.figure ? LIGHT : p.gold ? GOLD : INK;
-        } else {
-          const ke = el - T.explode;
-          const bk = easeOutCubic(clamp01(ke / T.burst));
-          const sx = X(p.su) + p.bx * bk, sy = Y(p.sv) + p.by * bk;
-          const k = clamp01((ke - 180 - p.d) / p.dur);
-          const e = easeOutExpo(k);
-          const tx = X(p.u), ty = Y(p.v);
-          x = sx + (tx - sx) * e + Math.sin(k * Math.PI) * p.curve;
-          y = sy + (ty - sy) * e;
-          alpha = p.a * (0.55 + 0.45 * e) * fade;
-          col = e > 0.5 ? p.c : p.gold ? GOLD : INK;
+        // halo: a camada pequena, ampliada e somada à luz
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = 0.4;
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(bloom, 0, 0, bloom.width * BLOOM, bloom.height * BLOOM);
+        ctx.restore();
+        // estrelas brilhantes do desenho
+        for (const f of run.flares) {
+          const k = eOutCubic(clamp01((el - f.t) / 500));
+          if (k <= 0) continue;
+          const sz = (22 + 22 * f.r) * (1 + 0.5 * (1 - k)) * (0.9 + 0.1 * Math.sin(t * 2.2 + f.u * 9));
+          ctx.globalAlpha = k;
+          ctx.drawImage(shineSprite, P.X(f.u) - sz / 2, P.Y(f.v) - sz / 2, sz, sz);
         }
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = `rgb(${col})`;
-        ctx.fillRect(x - 0.6, y - 0.6, 1.2, 1.2);
       }
 
-      // estrelas da constelação: acendem com as linhas, brilham na explosão e somem
-      const starA = exploded ? 1 - clamp01((el - T.explode) / 260) : 1;
-      const flare = exploded ? 1 + 1.6 * (1 - clamp01((el - T.explode) / 260)) : 1;
-      for (const k in cons.star) {
-        const st = cons.star[k];
-        const appear = clamp01((el - T.draw - 120) / 300);
-        const r = (4.3 - st.mag) * (small ? 0.9 : 1.15) + 0.6;
-        sparkle(X(st.uv[0]), Y(st.uv[1]), r * flare, appear * starA * (0.8 + 0.2 * Math.sin(t * 2.4 + st.mag * 3)));
-      }
-
-      // a flecha disparada: risco de luz da ponta até o zênite
+      // a flecha dispara: risco de luz da ponta até o zênite
       if (fired && !exploded) {
-        const k = easeOutCubic(clamp01((el - T.fire) / (T.explode - T.fire)));
-        const x0 = X(cons.tip[0]), y0 = Y(cons.tip[1]);
-        const x1 = X(cons.zenith[0]), y1 = Y(cons.zenith[1]);
-        const hx = x0 + (x1 - x0) * k, hy = y0 + (y1 - y0) * k;
-        const tail = Math.max(0, k - 0.5);
-        const g = ctx.createLinearGradient(x0 + (x1 - x0) * tail, y0 + (y1 - y0) * tail, hx, hy);
-        g.addColorStop(0, `rgba(${LIGHT},0)`);
-        g.addColorStop(1, `rgba(${LIGHT},0.95)`);
+        const k = eOutCubic(clamp01((el - run.fire) / (run.explode - run.fire)));
+        const [x0, y0] = P.tip, x1 = P.zx, y1 = P.zy;
+        const hx = x0 + (x1 - x0) * k, hy = y0 + (y1 - y0) * k, tl = Math.max(0, k - 0.5);
+        const grd = ctx.createLinearGradient(x0 + (x1 - x0) * tl, y0 + (y1 - y0) * tl, hx, hy);
+        grd.addColorStop(0, `rgba(${LIGHT},0)`);
+        grd.addColorStop(1, `rgba(${LIGHT},0.95)`);
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = g;
+        ctx.strokeStyle = grd;
         ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(x0 + (x1 - x0) * tail, y0 + (y1 - y0) * tail); ctx.lineTo(hx, hy); ctx.stroke();
-        sparkle(hx, hy, 1.6, 1);
+        ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(x0 + (x1 - x0) * tl, y0 + (y1 - y0) * tl); ctx.lineTo(hx, hy); ctx.stroke();
+        ctx.drawImage(shineSprite, hx - 10, hy - 10, 20, 20);
       }
 
-      // clarão no zênite quando a flecha acerta
+      // clarão no zênite, explosão e o logo
       if (exploded) {
-        const k = clamp01((el - T.explode) / 650);
+        const k = clamp01((el - run.explode) / 650);
         if (k < 1) {
-          const zx = X(cons.zenith[0]), zy = Y(cons.zenith[1]);
-          sparkle(zx, zy, 3 + 10 * easeOutCubic(k), 1 - k);
+          const sz = 20 + 60 * eOutCubic(k);
+          ctx.globalAlpha = 1 - k;
+          ctx.drawImage(shineSprite, P.zx - sz / 2, P.zy - sz / 2, sz, sz);
           ctx.globalAlpha = (1 - k) * 0.5;
           ctx.strokeStyle = `rgb(${GOLD})`;
           ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.arc(zx, zy, 8 + easeOutExpo(k) * lh * 0.45, Math.PI, Math.PI * 2); ctx.stroke();
+          ctx.beginPath(); ctx.arc(P.zx, P.zy, 8 + eOutExpo(k) * P.lh * 0.45, 0, Math.PI * 2); ctx.stroke();
         }
+        const fade = run.phase === "reveal" ? 1 - clamp01((now - run.revealAt) / 520) : 1;
+        const ke = el - run.explode, bk = eOutCubic(clamp01(ke / 320));
+        for (const p of run.fig) {
+          const sx = P.X(p.u) + p.bx * bk, sy = P.Y(p.v) + p.by * bk;
+          if (!p.target) {
+            const fa = (1 - clamp01(ke / 700)) * fade;
+            if (fa <= 0) continue;
+            ctx.globalAlpha = fa * (0.3 + 0.6 * p.b);
+            ctx.fillStyle = `rgb(${INK})`;
+            ctx.fillRect(sx - 0.6, sy - 0.6, 1.2, 1.2);
+            continue;
+          }
+          const kk = clamp01((ke - 180 - p.d) / p.tdur), e = eOutExpo(kk), q = p.target;
+          const x = sx + (LX(q.u) - sx) * e + Math.sin(kk * Math.PI) * p.curve, y = sy + (LY(q.v) - sy) * e;
+          ctx.globalAlpha = (e > 0.5 ? q.a : 0.4 + 0.6 * p.b) * (0.55 + 0.45 * e) * fade;
+          ctx.fillStyle = `rgb(${e > 0.5 ? q.c : INK})`;
+          ctx.fillRect(x - 0.6, y - 0.6, 1.2, 1.2);
+        }
+        if (run.phase === "intro" && el > run.endAt) reveal(now, false);
+        if (run.phase === "reveal" && fade <= 0) run = null;
       }
-
-      if (phase === "intro" && el > endAt) reveal(now, false);
-      if (phase === "reveal" && fade <= 0) { form = []; cons = null; phase = "done"; }
     }
 
-    // pulsos do toque/clique: círculos completos, um sim um não pontilhado
+    // cliques/toques: círculos completos, um sim um não pontilhado
     if (pulses.length) {
       ctx.strokeStyle = `rgb(${GOLD})`;
       ctx.lineWidth = 1;
@@ -414,7 +363,7 @@
           ctx.globalAlpha = (1 - age) * 0.6;
           ctx.setLineDash(i % 2 ? [1.2, 5] : []);
           ctx.beginPath();
-          ctx.arc(p.x, p.y, 8 + easeOutExpo(age) * 130, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, 8 + eOutExpo(age) * 130, 0, Math.PI * 2);
           ctx.stroke();
         }
       }
@@ -455,7 +404,7 @@
     stage.addEventListener("pointerleave", () => (pointer.on = false));
   }
   stage.addEventListener("pointerdown", (e) => {
-    if (phase === "intro") return skip(); // durante a abertura, tocar pula para o logo
+    if (run && run.phase === "intro") return skip(); // durante a abertura, tocar pula para o logo
     const p = local(e);
     pulses.push({ x: p.x, y: p.y, t: performance.now() });
     if (pulses.length > 4) pulses.shift();
@@ -471,13 +420,14 @@
   }).observe(stage);
 
   const start = async () => {
-    const data = await sampleLockup();
-    if (!data || !data.pts.length) { done(); phase = "done"; play(); return; }
-    makeForm(data);
-    t0 = performance.now();
     play();
+    if (!DATA) return done();
+    const logo = await sampleLockup();
+    if (!logo || !logo.length || root.classList.contains("sky-done")) return done();
+    run = setup(logo);
+    run.t0 = performance.now();
   };
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(start));
   // Rede de segurança: o logo nunca fica escondido
-  setTimeout(() => { if (phase === "intro") skip(); }, 7000);
+  setTimeout(() => { if (run && run.phase === "intro") skip(); else if (!run) done(); }, 7000);
 })();

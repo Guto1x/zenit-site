@@ -13,16 +13,16 @@ e os logos oficiais em `assets/brand/`. Nunca remonte nem recolora o logo; use o
 
 "Do horizonte ao zênite". A página inteira é o céu da marca, com só dois momentos de
 movimento autoral (abertura e rodapé) e o meio calmo, editorial:
-- **Abertura (céu + Sagitário, `assets/sky.js`, ~4 s, pulável)**: o topo é um céu de estrelas desenhado
-  no navegador. A constelação de Sagitário (estrelas reais, posições do céu) se desenha atrás do logo
-  com contas pontilhadas discretas; o arqueiro (arco e flecha, desenho próprio) em dourado-luz. A figura
-  é girada para a flecha mirar o zênite: a flecha dispara até a estrela da marca, há um clarão com um
-  meio-círculo de sonar, a constelação explode e os mesmos pontos formam o lockup (forma tirada do SVG
-  oficial, nas cores dele). No fim entra o arquivo oficial, nítido. Depois o céu só respira: o mouse
-  afasta e acende as estrelas em volta (raio ~170px), um clique/toque solta círculos completos
-  (um sim, um não pontilhado; meio-círculo ficou estranho). Céu denso: ~2.400 estrelas no PC, ~900 no
-  celular, com ~50 cintilantes (só brilho, sem cruz; metade douradas). Rolar, tocar ou usar o teclado pula a cena.
-  Nunca copiar arte de terceiros (a referência de "constelação desenhada" veio de um anime protegido).
+- **Abertura (centauro de estrelas, `assets/sky.js` + `assets/centauro.js`, ~5 s, pulável)**: o topo é um
+  céu de estrelas desenhado no navegador. As estrelas convergem e formam o centauro de Sagitário: ~14 mil
+  pontos tirados de uma imagem de referência (mais brilho = mais estrelas, o que dá o sombreado), com halo
+  suave e estrelas douradas nos pontos-chave. O centauro fica posicionado para a linha da flecha apontar para
+  a estrela do zênite; a flecha dispara, clarão, explosão, e parte das estrelas forma o lockup oficial (forma
+  tirada do SVG, nas cores dele). No fim entra o arquivo oficial, nítido. Depois o céu respira: o mouse afasta
+  e acende as estrelas (raio ~170px), clique/toque abre círculos completos. Céu denso: ~2.400 estrelas no PC,
+  ~900 no celular, ~50 cintilantes (só brilho). Rolar, tocar ou usar o teclado pula a cena.
+  A imagem do centauro foi fornecida pela ZENIT (informada como gerada por IA); confirmar a licença de uso
+  comercial antes de trocar ou reaproveitar. Para trocar a figura, gerar de novo `assets/centauro.js`.
   Reduzir movimento: céu parado, logo direto.
 - **Hero**: a marca (lockup oficial, inline) é o centro, grande e sem corte. Ela é viva: os anéis
   do sonar acendem do centro para fora e a estrela respira, sem nunca mudar cor nem geometria.
@@ -109,3 +109,4 @@ só entram quando a ZENIT fornecer dados reais.
 - 2026-11-27: abertura com Sagitário: o arqueiro mira o zênite, a flecha dispara, a constelação
   explode e vira o logo.
 - 2026-11-27: céu mais denso com estrelas cintilantes, efeito do mouse mais forte e cliques em círculo completo.
+- 2026-11-27: abertura trocada para o centauro de estrelas (versão "Converge", escolhida entre três).
