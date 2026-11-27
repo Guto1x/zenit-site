@@ -72,15 +72,15 @@ if (!reduce && window.gsap && window.ScrollTrigger) {
 
   const mm = gsap.matchMedia();
 
-  // Entrada: a marca acende
-  gsap.fromTo(".hero__brand", { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.7, ease: "expo.out" });
+  // A entrada da marca é o céu se organizando (assets/sky.js)
 
   // Desktop: hero fixado. A marca aproxima até a estrela (cresce) e dá lugar ao título
   mm.add("(min-width: 981px)", () => {
     gsap.timeline({
       scrollTrigger: { trigger: ".hero", start: "top top", end: "+=120%", scrub: 0.7, pin: ".hero__stage" },
     })
-      .to(".hero__services, .hero__brand-cta", { opacity: 0, y: 30, duration: 0.25, ease: "none" }, 0)
+      .fromTo(".hero__below", { opacity: 1, y: 0 }, { opacity: 0, y: 30, duration: 0.25, ease: "none", immediateRender: false }, 0)
+      .fromTo(".hero__sky-canvas", { scale: 1 }, { scale: 1.25, duration: 1, ease: "none", immediateRender: false }, 0)
       .to(".hero__lockup", { scale: 2.6, y: "8vh", duration: 0.7, ease: "none" }, 0)
       .to(".hero__lockup", { opacity: 0, duration: 0.3, ease: "none" }, 0.4)
       .to(".hero__title .line > span", { y: 0, duration: 0.35, stagger: 0.1, ease: "power2.out" }, 0.45)

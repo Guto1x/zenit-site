@@ -11,7 +11,15 @@ e os logos oficiais em `assets/brand/`. Nunca remonte nem recolora o logo; use o
 
 ## Conceito do site
 
-"Subir até o zênite". O visitante começa no horizonte e sobe:
+"Do horizonte ao zênite". A página inteira é o céu da marca, com só dois momentos de
+movimento autoral (abertura e rodapé) e o meio calmo, editorial:
+- **Abertura (céu de partículas, `assets/sky.js`)**: o topo é um céu de estrelas desenhado no navegador.
+  Ao abrir, parte das estrelas converge e forma o lockup, a partir da estrela do zênite; a forma é tirada
+  do próprio SVG oficial da página, nas cores dele. No fim, o arquivo oficial entra nítido e as partículas
+  somem: o que fica na tela é sempre o logo oficial. Depois o céu só respira: o mouse afasta as
+  estrelas próximas e um toque/clique solta um pulso de sonar (meios-círculos, um sim um não pontilhado).
+  Rolar, tocar ou usar o teclado durante a montagem pula para o fim. Pausa fora da tela.
+  Reduzir movimento: céu parado, logo direto.
 - **Hero**: a marca (lockup oficial, inline) é o centro, grande e sem corte. Ela é viva: os anéis
   do sonar acendem do centro para fora e a estrela respira, sem nunca mudar cor nem geometria.
   Ao rolar (desktop, fixado), a marca CRESCE até a estrela e dá lugar ao título, que sobe linha por linha.
@@ -92,3 +100,5 @@ só entram quando a ZENIT fornecer dados reais.
   fecha o menu, hover só com mouse, WhatsApp some onde já há contato.
 - 2026-11-27: revisão de movimento (Emil Kowalski): interface até 300 ms com ease-out, curva da marca
   só nos momentos da marca, rolagem com ligação direta, reduzir movimento menos radical.
+- 2026-11-27: direção "Do horizonte ao zênite" aprovada. Abertura com céu de partículas que se
+  organiza no lockup oficial (referências: Shopify Editions e rodapé de partículas da Oryzo).
