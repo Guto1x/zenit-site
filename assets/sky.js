@@ -420,10 +420,22 @@
     if (stage.clientWidth !== W || stage.clientHeight !== H) size();
   }).observe(stage);
 
+  // Alvos do logo pré-calculados (assets/centauro.js): não dependem de ler pixels de um canvas,
+  // o que o Safari do iPhone pode bloquear. A leitura ao vivo fica só como reserva.
+  function presetLogo() {
+    const L = DATA && DATA.logo;
+    if (!L || !L.length) return null;
+    const pts = [], step = small ? 2 : 1;
+    for (let i = 0; i < L.length; i += 6 * step) {
+      pts.push({ u: L[i] / 10000, v: L[i + 1] / 10000, a: Math.max(0.35, L[i + 2] / 255), c: `${L[i + 3]},${L[i + 4]},${L[i + 5]}` });
+    }
+    return pts;
+  }
+
   const start = async () => {
     play();
     if (!DATA) return done();
-    const logo = await sampleLockup();
+    const logo = presetLogo() || (await sampleLockup());
     if (!logo || !logo.length || root.classList.contains("sky-done")) return done();
     run = setup(logo);
     run.t0 = performance.now();

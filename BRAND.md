@@ -111,3 +111,4 @@ só entram quando a ZENIT fornecer dados reais.
 - 2026-11-27: céu mais denso com estrelas cintilantes, efeito do mouse mais forte e cliques em círculo completo.
 - 2026-11-27: abertura trocada para o centauro de estrelas (versão "Converge", escolhida entre três).
 - 2026-11-27: a rolagem não cancela mais a abertura.
+- 2026-11-27: alvos do logo pré-calculados em assets/centauro.js; o celular (Safari) não precisa ler pixels de canvas.
