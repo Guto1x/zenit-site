@@ -8,6 +8,7 @@
       para a estrela do zênite do logo.
    3. A flecha dispara até o zênite; clarão; o centauro explode e parte das estrelas forma o lockup
       (forma tirada do próprio SVG oficial, nas cores dele). Entra o arquivo oficial, nítido.
+      Rolar não interrompe; clicar/tocar na cena ou usar o teclado pula.
    4. Depois o céu respira: o mouse afasta e acende estrelas; um clique/toque abre círculos. */
 (() => {
   const root = document.documentElement;
@@ -410,8 +411,8 @@
     if (pulses.length > 4) pulses.shift();
   });
 
-  // Quem rola ou usa o teclado durante a abertura não espera por ela
-  ["wheel", "touchmove", "keydown"].forEach((ev) => addEventListener(ev, skip, { once: true, passive: true }));
+  // Rolar não interrompe a abertura; quem usa o teclado pode pular (clicar/tocar na cena também pula)
+  addEventListener("keydown", skip, { once: true });
 
   new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; onScreen ? play() : stop(); }).observe(stage);
   document.addEventListener("visibilitychange", () => (document.hidden ? stop() : play()));

@@ -20,8 +20,8 @@ movimento autoral (abertura e rodapé) e o meio calmo, editorial:
   a estrela do zênite; a flecha dispara, clarão, explosão, e parte das estrelas forma o lockup oficial (forma
   tirada do SVG, nas cores dele). No fim entra o arquivo oficial, nítido. Depois o céu respira: o mouse afasta
   e acende as estrelas (raio ~170px), clique/toque abre círculos completos. Céu denso: ~2.400 estrelas no PC,
-  ~900 no celular, ~50 cintilantes (só brilho). Rolar, tocar ou usar o teclado pula a cena.
-  A imagem do centauro foi fornecida pela ZENIT (informada como gerada por IA); confirmar a licença de uso
+  ~900 no celular, ~50 cintilantes (só brilho). Rolar NÃO interrompe a cena (pedido do cliente); clicar/tocar
+  nela ou usar o teclado pula. A imagem do centauro foi fornecida pela ZENIT (informada como gerada por IA); confirmar a licença de uso
   comercial antes de trocar ou reaproveitar. Para trocar a figura, gerar de novo `assets/centauro.js`.
   Reduzir movimento: céu parado, logo direto.
 - **Hero**: a marca (lockup oficial, inline) é o centro, grande e sem corte. Ela é viva: os anéis
@@ -110,3 +110,4 @@ só entram quando a ZENIT fornecer dados reais.
   explode e vira o logo.
 - 2026-11-27: céu mais denso com estrelas cintilantes, efeito do mouse mais forte e cliques em círculo completo.
 - 2026-11-27: abertura trocada para o centauro de estrelas (versão "Converge", escolhida entre três).
+- 2026-11-27: a rolagem não cancela mais a abertura.
