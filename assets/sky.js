@@ -117,22 +117,44 @@
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
 
+  // Céu denso: muitas estrelas pequenas, algumas maiores e poucas cintilantes (brilho + cruz),
+  // para o mouse ter o que afastar e o efeito ser percebido
   function makeStars() {
-    const n = Math.max(260, Math.min(small ? 420 : 1000, Math.round((W * H) / 1500)));
-    stars = Array.from({ length: n }, () => {
-      const big = Math.random() < 0.07;
+    const n = Math.max(500, Math.min(small ? 900 : 2400, Math.round((W * H) / 600)));
+    const nShine = small ? 22 : 54;
+    stars = Array.from({ length: n }, (_, i) => {
+      const shine = i < nShine;
+      const big = !shine && Math.random() < 0.12;
       return {
         nx: Math.random(),
-        ny: Math.pow(Math.random(), 1.25),
-        r: big ? rand(1.3, 1.9) : rand(0.5, 1.1),
-        a: big ? rand(0.6, 0.95) : rand(0.18, 0.7),
-        gold: Math.random() < 0.08,
+        ny: Math.pow(Math.random(), 1.15),
+        r: shine ? rand(1.1, 2.1) : big ? rand(1.3, 2) : rand(0.5, 1.1),
+        a: shine ? rand(0.75, 1) : big ? rand(0.6, 0.95) : rand(0.2, 0.7),
+        gold: shine ? Math.random() < 0.55 : Math.random() < 0.08,
+        shine,
         sp: rand(0.5, 1.6),
         ph: rand(0, Math.PI * 2),
         ox: 0, oy: 0,
       };
     });
   }
+
+  // Sprite da estrela cintilante (brilho + cruz), desenhado uma vez e reaproveitado
+  const shineSprite = (() => {
+    const c = document.createElement("canvas"), R = 32;
+    c.width = c.height = R * 2;
+    const g = c.getContext("2d");
+    const grd = g.createRadialGradient(R, R, 0, R, R, R);
+    grd.addColorStop(0, `rgba(${LIGHT},0.9)`);
+    grd.addColorStop(0.18, `rgba(${GOLD},0.28)`);
+    grd.addColorStop(1, `rgba(${GOLD},0)`);
+    g.fillStyle = grd;
+    g.fillRect(0, 0, R * 2, R * 2);
+    g.fillStyle = `rgb(${LIGHT})`;
+    g.fillRect(R - 15, R - 0.6, 30, 1.2);
+    g.fillRect(R - 0.6, R - 20, 1.2, 40);
+    return c;
+  })();
 
   /* ---------- Alvos: pontos tirados do próprio SVG oficial ---------- */
   function sampleLockup() {
@@ -269,25 +291,36 @@
     const t = now / 1000;
     ctx.clearRect(0, 0, W, H);
 
-    // estrelas de fundo
+    // estrelas de fundo: o mouse abre um vão no céu e acende as estrelas em volta
+    const R = small ? 0 : 170, PUSH = 46;
+    const shines = [];
     for (const pass of [INK, GOLD]) {
       ctx.fillStyle = `rgb(${pass})`;
       for (const s of stars) {
         if ((pass === GOLD) !== s.gold) continue;
         const bx = s.nx * W, by = s.ny * H;
-        let tx = 0, ty = 0;
+        let tx = 0, ty = 0, near = 0;
         if (pointer.on) {
           const dx = bx - pointer.x, dy = by - pointer.y, dd = Math.hypot(dx, dy);
-          if (dd < 120 && dd > 0.1) {
-            const push = Math.pow(1 - dd / 120, 2) * 26;
+          if (dd < R && dd > 0.1) {
+            near = 1 - dd / R;
+            const push = near * near * PUSH;
             tx = (dx / dd) * push; ty = (dy / dd) * push;
           }
         }
-        s.ox += (tx - s.ox) * 0.08;
-        s.oy += (ty - s.oy) * 0.08;
-        ctx.globalAlpha = s.a * (0.62 + 0.38 * Math.sin(t * s.sp + s.ph));
-        ctx.fillRect(bx + s.ox - s.r / 2, by + s.oy - s.r / 2, s.r, s.r);
+        s.ox += (tx - s.ox) * 0.09;
+        s.oy += (ty - s.oy) * 0.09;
+        const a = Math.min(1, s.a * (0.62 + 0.38 * Math.sin(t * s.sp + s.ph)) + near * 0.55);
+        if (s.shine) { shines.push([bx + s.ox, by + s.oy, s.r, a, near]); continue; }
+        ctx.globalAlpha = a;
+        const r = s.r * (1 + near * 0.6);
+        ctx.fillRect(bx + s.ox - r / 2, by + s.oy - r / 2, r, r);
       }
+    }
+    for (const [x, y, r, a, near] of shines) {
+      const sz = (10 + r * 9) * (1 + near * 0.35);
+      ctx.globalAlpha = a * 0.9;
+      ctx.drawImage(shineSprite, x - sz / 2, y - sz / 2, sz, sz);
     }
 
     if (form.length) {
@@ -370,7 +403,7 @@
       if (phase === "reveal" && fade <= 0) { form = []; cons = null; phase = "done"; }
     }
 
-    // pulsos de sonar do toque/clique
+    // pulsos do toque/clique: círculos completos, um sim um não pontilhado
     if (pulses.length) {
       ctx.strokeStyle = `rgb(${GOLD})`;
       ctx.lineWidth = 1;
@@ -382,7 +415,7 @@
           ctx.globalAlpha = (1 - age) * 0.6;
           ctx.setLineDash(i % 2 ? [1.2, 5] : []);
           ctx.beginPath();
-          ctx.arc(p.x, p.y, 10 + easeOutExpo(age) * 150, Math.PI, Math.PI * 2);
+          ctx.arc(p.x, p.y, 8 + easeOutExpo(age) * 130, 0, Math.PI * 2);
           ctx.stroke();
         }
       }
@@ -398,9 +431,11 @@
   function drawStatic() {
     ctx.clearRect(0, 0, W, H);
     for (const s of stars) {
+      const x = s.nx * W, y = s.ny * H;
+      if (s.shine) { const sz = 10 + s.r * 9; ctx.globalAlpha = s.a * 0.8; ctx.drawImage(shineSprite, x - sz / 2, y - sz / 2, sz, sz); continue; }
       ctx.fillStyle = `rgb(${s.gold ? GOLD : INK})`;
       ctx.globalAlpha = s.a * 0.8;
-      ctx.fillRect(s.nx * W - s.r / 2, s.ny * H - s.r / 2, s.r, s.r);
+      ctx.fillRect(x - s.r / 2, y - s.r / 2, s.r, s.r);
     }
     ctx.globalAlpha = 1;
   }
