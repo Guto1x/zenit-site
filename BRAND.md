@@ -63,8 +63,14 @@ e os logos oficiais em `assets/brand/`. Nunca remonte nem recolora o logo; use o
 - **Só três movimentos**: a passagem do hero, os painéis do Método e o sonar vivo. Nada de títulos
   crescendo, itens subindo em sequência ou parallax em toda seção. Fora do hero, o conteúdo
   nunca começa invisível ou apagado.
-- Curva da marca `cubic-bezier(.65,0,.35,1)`, 0,5–0,7 s para entradas.
-- Com "reduzir movimento" ativo: nada fixado, nada escalando, tudo visível de imediato.
+- Curva da marca `cubic-bezier(.65,0,.35,1)`, 0,5–0,7 s: **só nos momentos da marca** (entrada do
+  logo, sonar). Rolagem presa ao scroll usa ligação direta (`ease: "none"`), nunca curva que começa devagar.
+- Interface (hover, foco, toque, menu, FAQ, WhatsApp): `--ease-out` `cubic-bezier(0.23,1,0.32,1)`,
+  até 300 ms; cor em `150ms ease`; botões com `scale(.97)` no toque. Hover que move só com
+  `(hover: hover) and (pointer: fine)`. Nada nasce de `scale(0)`. Nada anima em ação de teclado.
+- Animações controladas pela rolagem aplicam `transform` direto no elemento (sem variável CSS no pai).
+- Com "reduzir movimento" ativo: nada fixado, nada escalando, tudo visível de imediato; brilho e cor
+  continuam (o sonar só muda brilho, então fica). O sonar pausa quando o topo sai da tela.
 - No celular: sem painéis horizontais; tudo empilha.
 
 ## Texto
@@ -84,3 +90,5 @@ só entram quando a ZENIT fornecer dados reais.
   acompanhamento em quatro perguntas (sai o painel de exemplo), só três movimentos, limites de
   tipografia, contraste dos campos, fontes no próprio site, link "pular para o conteúdo", Esc
   fecha o menu, hover só com mouse, WhatsApp some onde já há contato.
+- 2026-11-27: revisão de movimento (Emil Kowalski): interface até 300 ms com ease-out, curva da marca
+  só nos momentos da marca, rolagem com ligação direta, reduzir movimento menos radical.

@@ -33,6 +33,9 @@ svg.querySelectorAll("g[clip-path] > path").forEach((ring) => {
   ring.style.setProperty("--o", ring.getAttribute("stroke-opacity") || "0.3");
 });
 svg.querySelectorAll('circle[fill^="url(#ldglow"], circle[fill^="url(#ldcore"]').forEach((c) => c.classList.add("glow"));
+// Pausa o sonar quando o topo sai da tela (ninguém vê, não precisa redesenhar)
+const heroEl = document.querySelector(".hero");
+new IntersectionObserver(([en]) => heroEl.classList.toggle("is-offscreen", !en.isIntersecting)).observe(heroEl);
 
 /* ---------- WhatsApp ---------- */
 const waFloat = document.querySelector(".wa-float");
@@ -66,12 +69,11 @@ const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (!reduce && window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
   document.documentElement.classList.add("motion");
-  const ease = "power3.inOut"; // equivalente à curva da marca (.65,0,.35,1)
 
   const mm = gsap.matchMedia();
 
   // Entrada: a marca acende
-  gsap.to(".hero__brand", { opacity: 1, duration: 1.1, ease });
+  gsap.fromTo(".hero__brand", { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.7, ease: "expo.out" });
 
   // Desktop: hero fixado. A marca aproxima até a estrela (cresce) e dá lugar ao título
   mm.add("(min-width: 981px)", () => {
@@ -79,13 +81,15 @@ if (!reduce && window.gsap && window.ScrollTrigger) {
       scrollTrigger: { trigger: ".hero", start: "top top", end: "+=120%", scrub: 0.7, pin: ".hero__stage" },
     })
       .to(".hero__services, .hero__brand-cta", { opacity: 0, y: 30, duration: 0.25, ease: "none" }, 0)
-      .to(".hero__lockup", { scale: 2.6, y: "8vh", duration: 0.7, ease: "power1.in" }, 0)
+      .to(".hero__lockup", { scale: 2.6, y: "8vh", duration: 0.7, ease: "none" }, 0)
       .to(".hero__lockup", { opacity: 0, duration: 0.3, ease: "none" }, 0.4)
       .to(".hero__title .line > span", { y: 0, duration: 0.35, stagger: 0.1, ease: "power2.out" }, 0.45)
       .to(".hero__foot", { opacity: 1, duration: 0.25, ease: "none" }, 0.8);
 
     // Método: painéis horizontais fixados, linha pontilhada avança
     const track = document.querySelector(".method__track");
+    const setLine = gsap.quickSetter(".method__line span", "scaleX");
+    setLine(0);
     const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
     gsap.to(track, {
       x: () => -dist(),
@@ -97,25 +101,26 @@ if (!reduce && window.gsap && window.ScrollTrigger) {
         pin: ".method__pin",
         scrub: 0.6,
         invalidateOnRefresh: true,
-        onUpdate: (self) => track.style.setProperty("--p", self.progress.toFixed(3)),
+        onUpdate: (self) => setLine(self.progress),
       },
     });
-    track.style.setProperty("--p", 0);
+    return () => gsap.set(".method__line span", { clearProps: "transform" });
   });
 
   // Celular: título sobe linha por linha ao carregar
   mm.add("(max-width: 980px)", () => {
-    gsap.from(".hero__title .line > span", { yPercent: 105, duration: 0.7, stagger: 0.12, ease, delay: 0.4 });
+    gsap.from(".hero__title .line > span", { yPercent: 105, duration: 0.6, stagger: 0.08, ease: "power3.out", delay: 0.15 });
   });
 
   // Celular/tablet: linha do método desce conforme a rolagem
   mm.add("(max-width: 980px)", () => {
-    const track = document.querySelector(".method__track");
-    track.style.setProperty("--p", 0);
+    const setLine = gsap.quickSetter(".method__line span", "scaleY");
+    setLine(0);
     ScrollTrigger.create({
-      trigger: track, start: "top 70%", end: "bottom 60%", scrub: true,
-      onUpdate: (self) => track.style.setProperty("--p", self.progress.toFixed(3)),
+      trigger: ".method__track", start: "top 70%", end: "bottom 60%", scrub: true,
+      onUpdate: (self) => setLine(self.progress),
     });
+    return () => gsap.set(".method__line span", { clearProps: "transform" });
   });
 
   window.addEventListener("load", () => ScrollTrigger.refresh());
