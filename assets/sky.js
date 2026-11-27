@@ -139,20 +139,19 @@
     });
   }
 
-  // Sprite da estrela cintilante (brilho + cruz), desenhado uma vez e reaproveitado
+  // Sprite da estrela cintilante: só o brilho (sem cruz), com um núcleo de luz; desenhado uma vez
   const shineSprite = (() => {
     const c = document.createElement("canvas"), R = 32;
     c.width = c.height = R * 2;
     const g = c.getContext("2d");
     const grd = g.createRadialGradient(R, R, 0, R, R, R);
-    grd.addColorStop(0, `rgba(${LIGHT},0.9)`);
-    grd.addColorStop(0.18, `rgba(${GOLD},0.28)`);
+    grd.addColorStop(0, `rgba(${LIGHT},1)`);
+    grd.addColorStop(0.07, `rgba(${LIGHT},0.85)`);
+    grd.addColorStop(0.2, `rgba(${GOLD},0.3)`);
+    grd.addColorStop(0.5, `rgba(${GOLD},0.08)`);
     grd.addColorStop(1, `rgba(${GOLD},0)`);
     g.fillStyle = grd;
     g.fillRect(0, 0, R * 2, R * 2);
-    g.fillStyle = `rgb(${LIGHT})`;
-    g.fillRect(R - 15, R - 0.6, 30, 1.2);
-    g.fillRect(R - 0.6, R - 20, 1.2, 40);
     return c;
   })();
 

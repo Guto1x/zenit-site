@@ -21,7 +21,7 @@ movimento autoral (abertura e rodapé) e o meio calmo, editorial:
   oficial, nas cores dele). No fim entra o arquivo oficial, nítido. Depois o céu só respira: o mouse
   afasta e acende as estrelas em volta (raio ~170px), um clique/toque solta círculos completos
   (um sim, um não pontilhado; meio-círculo ficou estranho). Céu denso: ~2.400 estrelas no PC, ~900 no
-  celular, com ~50 cintilantes (brilho + cruz, metade douradas). Rolar, tocar ou usar o teclado pula a cena.
+  celular, com ~50 cintilantes (só brilho, sem cruz; metade douradas). Rolar, tocar ou usar o teclado pula a cena.
   Nunca copiar arte de terceiros (a referência de "constelação desenhada" veio de um anime protegido).
   Reduzir movimento: céu parado, logo direto.
 - **Hero**: a marca (lockup oficial, inline) é o centro, grande e sem corte. Ela é viva: os anéis
