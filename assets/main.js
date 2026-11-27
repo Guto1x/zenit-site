@@ -14,6 +14,14 @@ document.querySelectorAll(".nav__links a").forEach((a) =>
     toggle.setAttribute("aria-expanded", "false");
   })
 );
+// Esc fecha o menu e devolve o foco ao botão
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && nav.classList.contains("is-open")) {
+    nav.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.focus();
+  }
+});
 const onScroll = () => nav.classList.toggle("is-scrolled", window.scrollY > 40);
 onScroll();
 window.addEventListener("scroll", onScroll, { passive: true });
@@ -31,6 +39,13 @@ const waFloat = document.querySelector(".wa-float");
 waFloat.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Olá! Vim pelo site da ZENIT e quero saber mais.")}`;
 waFloat.target = "_blank";
 waFloat.rel = "noopener";
+// O botão flutuante some onde já existe um caminho de contato na tela (topo e contato/rodapé)
+const waHideZones = new Set();
+const waIO = new IntersectionObserver((entries) => {
+  entries.forEach((en) => (en.isIntersecting ? waHideZones.add(en.target) : waHideZones.delete(en.target)));
+  waFloat.classList.toggle("is-hidden", waHideZones.size > 0);
+}, { threshold: 0.15 });
+document.querySelectorAll(".hero, .contact, .footer").forEach((el) => waIO.observe(el));
 
 document.getElementById("form-contato").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -63,7 +78,7 @@ if (!reduce && window.gsap && window.ScrollTrigger) {
     gsap.timeline({
       scrollTrigger: { trigger: ".hero", start: "top top", end: "+=120%", scrub: 0.7, pin: ".hero__stage" },
     })
-      .to(".hero__services, .hero__scroll", { opacity: 0, y: 30, duration: 0.25, ease: "none" }, 0)
+      .to(".hero__services, .hero__brand-cta", { opacity: 0, y: 30, duration: 0.25, ease: "none" }, 0)
       .to(".hero__lockup", { scale: 2.6, y: "8vh", duration: 0.7, ease: "power1.in" }, 0)
       .to(".hero__lockup", { opacity: 0, duration: 0.3, ease: "none" }, 0.4)
       .to(".hero__title .line > span", { y: 0, duration: 0.35, stagger: 0.1, ease: "power2.out" }, 0.45)
@@ -101,47 +116,6 @@ if (!reduce && window.gsap && window.ScrollTrigger) {
       trigger: track, start: "top 70%", end: "bottom 60%", scrub: true,
       onUpdate: (self) => track.style.setProperty("--p", self.progress.toFixed(3)),
     });
-  });
-
-  // Títulos de seção: escalam ao entrar
-  gsap.utils.toArray(".section-title, .contact__title").forEach((t) => {
-    gsap.fromTo(t, { scale: 0.88, opacity: 0.2, transformOrigin: "left bottom" }, {
-      scale: 1, opacity: 1, ease: "none",
-      scrollTrigger: { trigger: t, start: "top 95%", end: "top 55%", scrub: true },
-    });
-  });
-
-  // Linhas de serviço e itens entram em sequência
-  gsap.utils.toArray(".faq__list details, .report__points li, .field").forEach((el) => el.setAttribute("data-rise", ""));
-  ScrollTrigger.batch("[data-rise]", {
-    start: "top 90%",
-    onEnter: (els) => gsap.to(els, { opacity: 1, y: 0, duration: 0.6, ease, stagger: 0.07 }),
-  });
-
-  // Painel do relatório: barras crescem e números contam
-  gsap.from(".panel__bars span", {
-    scaleY: 0, duration: 0.7, ease, stagger: 0.06,
-    scrollTrigger: { trigger: ".panel", start: "top 75%" },
-  });
-  document.querySelectorAll("[data-count]").forEach((el) => {
-    const end = +el.dataset.count;
-    el.textContent = "0";
-    const obj = { v: 0 };
-    gsap.to(obj, {
-      v: end, duration: 1.4, ease: "power2.out",
-      scrollTrigger: { trigger: ".panel", start: "top 75%" },
-      onUpdate: () => (el.textContent = Math.round(obj.v).toLocaleString("pt-BR")),
-    });
-  });
-  gsap.from(".panel", {
-    y: 60, rotate: -1.5, duration: 0.9, ease,
-    scrollTrigger: { trigger: ".panel", start: "top 85%" },
-  });
-
-  // Palavra gigante do rodapé sobe
-  gsap.from(".footer__giant img", {
-    yPercent: 40, ease: "none",
-    scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: true },
   });
 
   window.addEventListener("load", () => ScrollTrigger.refresh());

@@ -12,29 +12,29 @@
   <meta name="theme-color" content="#020A16" />
   <link rel="icon" href="assets/brand/symbol-mark.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/brand/zenit-avatar.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
   <header class="nav" id="topo">
     <div class="wrap nav__inner">
       <a href="#topo" class="nav__logo" aria-label="ZENIT — início">
         <img src="assets/brand/wordmark-dark.svg" alt="ZENIT" width="110" height="19" />
       </a>
-      <nav class="nav__links" aria-label="Principal">
+      <nav class="nav__links" id="menu" aria-label="Principal">
         <a href="#servicos">Serviços</a>
         <a href="#metodo">Método</a>
         <a href="#acompanhamento">Acompanhamento</a>
         <a href="#faq">Dúvidas</a>
         <a href="#contato" class="nav__cta">Diagnóstico gratuito</a>
       </nav>
-      <button class="nav__toggle" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span></button>
+      <button class="nav__toggle" aria-label="Abrir menu" aria-controls="menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </header>
 
-  <main>
+  <main id="conteudo">
     <!-- HERO: a marca grande e viva; ao rolar, aproxima até a estrela e o título sobe -->
     <section class="hero" aria-label="Apresentação">
       <div class="hero__stage">
@@ -62,8 +62,13 @@
 <line x1="591.5" y1="602" x2="754" y2="602" stroke="#DEBA7E" stroke-width="1.1"></line>
 </svg>
           </div>
-          <p class="hero__services">SEO local · Tráfego pago · Sites · One page · E-commerce · Automações</p>
-          <p class="hero__scroll" aria-hidden="true"><span></span>Role para subir</p>
+          <ul class="hero__services" aria-label="Serviços">
+            <li>SEO local</li><li>Tráfego pago</li><li>Sites</li><li>One page</li><li>E-commerce</li><li>Automações</li>
+          </ul>
+          <div class="hero__brand-cta">
+            <a href="#contato" class="btn">Pedir diagnóstico gratuito</a>
+            <p class="hero__scroll" aria-hidden="true"><span></span>Role para subir</p>
+          </div>
         </div>
         <div class="wrap hero__copy">
           <h1 class="hero__title">
@@ -91,40 +96,34 @@
         </div>
 
         <ol class="svc">
-          <li class="svc__item" data-rise>
-            <span class="svc__n">01</span>
+          <li class="svc__item">
             <div class="svc__title"><h3 class="svc__name">SEO local</h3><p class="svc__short">Aparecer no Google e no Maps da sua região</p></div>
-            <p class="svc__problem"><strong>O problema</strong>Quem procura pelo seu serviço na sua cidade encontra o concorrente primeiro.</p>
+            <p class="svc__problem">Quem procura pelo seu serviço na sua cidade encontra o concorrente primeiro.</p>
             <ul class="svc__list"><li>Perfil da Empresa no Google completo e otimizado</li><li>Palavras-chave da sua região no site</li><li>Estratégia para conseguir e responder avaliações</li><li>Preparação para aparecer também em respostas de IAs, como ChatGPT e Gemini</li></ul>
           </li>
-          <li class="svc__item" data-rise>
-            <span class="svc__n">02</span>
+          <li class="svc__item">
             <div class="svc__title"><h3 class="svc__name">Tráfego pago</h3><p class="svc__short">Google Ads e Meta Ads medidos por contato</p></div>
-            <p class="svc__problem"><strong>O problema</strong>Muito clique, pouco contato, e ninguém sabe quanto custou cada cliente.</p>
+            <p class="svc__problem">Muito clique, pouco contato, e ninguém sabe quanto custou cada cliente.</p>
             <ul class="svc__list"><li>Campanhas no Google Ads, Instagram e Facebook</li><li>Públicos por região, interesse e remarketing</li><li>Medição configurada antes de a campanha entrar no ar</li><li>Relatório com custo por contato, em linguagem de dono de negócio</li></ul>
           </li>
-          <li class="svc__item" data-rise>
-            <span class="svc__n">03</span>
+          <li class="svc__item">
             <div class="svc__title"><h3 class="svc__name">Sites</h3><p class="svc__short">Institucionais, rápidos e feitos para converter</p></div>
-            <p class="svc__problem"><strong>O problema</strong>O site existe, mas é lento, não abre bem no celular e não leva ninguém a falar com você.</p>
+            <p class="svc__problem">O site existe, mas é lento, não abre bem no celular e não leva ninguém a falar com você.</p>
             <ul class="svc__list"><li>Design próprio, a partir da sua marca</li><li>Pensado primeiro para o celular</li><li>Estrutura pronta para SEO e para medir conversões</li><li>Botões de contato e WhatsApp nos lugares certos</li></ul>
           </li>
-          <li class="svc__item" data-rise>
-            <span class="svc__n">04</span>
+          <li class="svc__item">
             <div class="svc__title"><h3 class="svc__name">One page</h3><p class="svc__short">Uma página, um objetivo</p></div>
-            <p class="svc__problem"><strong>O problema</strong>O anúncio leva para uma página que fala de tudo e não pede nada.</p>
+            <p class="svc__problem">O anúncio leva para uma página que fala de tudo e não pede nada.</p>
             <ul class="svc__list"><li>Página única focada na oferta da campanha</li><li>Contato direto pelo WhatsApp</li><li>Integrada ao Google Ads e ao Meta Ads</li><li>Ideal para lançamento, evento ou captação</li></ul>
           </li>
-          <li class="svc__item" data-rise>
-            <span class="svc__n">05</span>
+          <li class="svc__item">
             <div class="svc__title"><h3 class="svc__name">E-commerce</h3><p class="svc__short">Loja virtual vendendo 24 horas</p></div>
-            <p class="svc__problem"><strong>O problema</strong>As vendas dependem de responder cada cliente na mão, um por um.</p>
+            <p class="svc__problem">As vendas dependem de responder cada cliente na mão, um por um.</p>
             <ul class="svc__list"><li>Catálogo, carrinho e checkout</li><li>Pix, cartão e boleto</li><li>Cálculo de frete e gestão de pedidos</li><li>Conectada ao tráfego pago e às automações</li></ul>
           </li>
-          <li class="svc__item" data-rise>
-            <span class="svc__n">06</span>
+          <li class="svc__item">
             <div class="svc__title"><h3 class="svc__name">Automações</h3><p class="svc__short">O que é repetitivo roda sozinho</p></div>
-            <p class="svc__problem"><strong>O problema</strong>O contato chega fora do horário e ninguém responde a tempo.</p>
+            <p class="svc__problem">O contato chega fora do horário e ninguém responde a tempo.</p>
             <ul class="svc__list"><li>Atendimento inicial e triagem no WhatsApp</li><li>Follow-up automático de quem não respondeu</li><li>Integração entre formulário, planilha e CRM</li><li>Automação no repetitivo; o relacionamento continua humano</li></ul>
           </li>
         </ol>
@@ -166,36 +165,19 @@
       </div>
     </section>
 
-    <!-- ACOMPANHAMENTO: exemplo de relatório -->
+    <!-- ACOMPANHAMENTO: as quatro perguntas que o resumo mensal responde -->
     <section class="report" id="acompanhamento">
-      <div class="wrap report__grid">
-        <div class="report__copy">
-          <h2 class="section-title">O acompanhamento, na prática</h2>
-          <p class="section-note">Todo mês você recebe um resumo curto, sem jargão. É assim que a estrutura deixa de ser um projeto e vira direção.</p>
-          <ul class="report__points">
-            <li>Você fala direto com quem executa</li>
-            <li>Números que viram decisão, não curtidas</li>
-            <li>Cada mudança registrada, com o motivo</li>
-          </ul>
+      <div class="wrap">
+        <div class="section-top">
+          <h2 class="section-title">Acompanhamento</h2>
+          <p class="section-note">Todo mês, um resumo curto e sem jargão que responde quatro perguntas. E você fala direto com quem executa.</p>
         </div>
-        <figure class="panel" aria-label="Exemplo de relatório mensal">
-          <figcaption class="panel__head">
-            <span>Relatório mensal</span>
-            <span class="panel__tag">Exemplo ilustrativo</span>
-          </figcaption>
-          <dl class="panel__stats">
-            <div><dt>Contatos recebidos</dt><dd><span data-count="86">86</span></dd></div>
-            <div><dt>Custo por contato</dt><dd>R$&nbsp;<span data-count="14">14</span></dd></div>
-            <div><dt>Ações no Google Maps</dt><dd><span data-count="1240">1240</span></dd></div>
-          </dl>
-          <div class="panel__bars" aria-hidden="true">
-            <span style="--h:38%"></span><span style="--h:52%"></span><span style="--h:47%"></span><span style="--h:61%"></span><span style="--h:58%"></span><span style="--h:72%"></span><span style="--h:69%"></span><span style="--h:84%"></span>
-          </div>
-          <div class="panel__log">
-            <p><b>O que mudamos</b> Pausamos o anúncio de menor retorno e reforçamos a busca local.</p>
-            <p><b>Próximo passo</b> Página de serviço nova para o bairro com mais procura.</p>
-          </div>
-        </figure>
+        <ul class="questions">
+          <li><p class="q">Quantos contatos chegaram<span>?</span></p><p class="a">Separados por canal: Google, Maps, anúncios, site e WhatsApp.</p></li>
+          <li><p class="q">Quanto custou cada um<span>?</span></p><p class="a">O investimento do mês dividido por contatos reais, não por cliques ou curtidas.</p></li>
+          <li><p class="q">O que mudamos, e por quê<span>?</span></p><p class="a">Cada ajuste registrado com o motivo, para você acompanhar a decisão.</p></li>
+          <li><p class="q">O que vem agora<span>?</span></p><p class="a">A prioridade do mês seguinte, combinada com você antes de entrar no ar.</p></li>
+        </ul>
       </div>
     </section>
 
@@ -253,9 +235,11 @@
     <div class="footer__giant" aria-hidden="true"><img src="assets/brand/wordmark-dark.svg" alt="" /></div>
   </footer>
 
-  <a class="wa-float" href="#contato" aria-label="Falar no WhatsApp">
+  <aside aria-label="Contato rápido">
+    <a class="wa-float" href="#contato" aria-label="Falar no WhatsApp">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
   </a>
+  </aside>
 
   <script src="assets/vendor/gsap.min.js"></script>
   <script src="assets/vendor/ScrollTrigger.min.js"></script>

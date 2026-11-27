@@ -15,12 +15,15 @@ e os logos oficiais em `assets/brand/`. Nunca remonte nem recolora o logo; use o
 - **Hero**: a marca (lockup oficial, inline) é o centro, grande e sem corte. Ela é viva: os anéis
   do sonar acendem do centro para fora e a estrela respira, sem nunca mudar cor nem geometria.
   Ao rolar (desktop, fixado), a marca CRESCE até a estrela e dá lugar ao título, que sobe linha por linha.
-  Nada no hero só diminui.
-- **Serviços**: tudo à vista, sem clique: nome, frase curta em dourado, "o problema" e o que entra.
+  Nada no hero só diminui. Logo abaixo da marca, já visíveis: os serviços e o botão
+  "Pedir diagnóstico gratuito" (a oferta nunca fica escondida atrás da rolagem).
+- **Serviços**: tudo à vista, sem clique: nome, frase curta em dourado, o problema (como frase, sem rótulo)
+  e o que entra. Sem numeração: os serviços não são uma sequência.
   O cliente não pode ter esforço para descobrir o que vendemos.
 - **Método**: painéis horizontais fixados, com a linha pontilhada dourada (a mesma do lockup)
   avançando de etapa em etapa.
-- **Acompanhamento**: um exemplo de relatório mensal, marcado como exemplo.
+- **Acompanhamento**: as quatro perguntas que o resumo mensal responde, em tipografia grande, com o "?"
+  em dourado. Nada de painel com números inventados, gráfico de barras ou caixa com sombra.
 - **Rodapé**: a palavra ZENIT enorme, quase apagada, sempre inteira (nunca cortada).
 
 ## O que NÃO fazer (cara de site feito por IA)
@@ -34,6 +37,9 @@ e os logos oficiais em `assets/brand/`. Nunca remonte nem recolora o logo; use o
 - Conteúdo escondido atrás de clique (acordeão) para o que o cliente precisa ver de cara.
 - Bloco de texto grande sem função (o "manifesto" foi removido a pedido: incomodava).
 - Logo cortado ou pequeno demais.
+- Numeração 01/02/03 onde a ordem não informa nada (só o Método tem números).
+- Rótulo em caixa-alta repetido acima de cada bloco ("O PROBLEMA").
+- Painel de métricas com números grandes, rótulos pequenos e barras: o modelo pronto de "dashboard".
 
 ## Cor
 
@@ -41,16 +47,22 @@ e os logos oficiais em `assets/brand/`. Nunca remonte nem recolora o logo; use o
 - **Dourado só onde há luz ou interação**: estrela, linhas pontilhadas, números de etapa,
   estado de hover/foco/ativo. Não usar dourado como fundo de bloco grande.
 - Botão principal: off-white com texto marinho; vira dourado no hover.
-- Verde só no botão do WhatsApp.
+- Verde só no botão do WhatsApp. Ele some no topo e na área de contato, onde já há botão.
+- Borda de campo de formulário: `--line-control` (#5B6572, 3,4:1). O `--line` (1,4:1) só para divisores.
 
 ## Tipografia
 
 - Títulos: Space Grotesk 500, grandes, alinhados à esquerda, entreletra levemente negativo.
+- Fontes hospedadas no próprio site (`assets/fonts/`, Fontsource, licença OFL), subconjunto latino.
+- Limites: título no máximo 96px (6rem); entreletra no mínimo -0.04em.
 - Texto: Inter. Rótulos de marca: Poppins Medium caixa-alta (com moderação, não em toda seção).
 
 ## Movimento
 
 - GSAP + ScrollTrigger (em `assets/vendor/`, licença padrão gratuita da GreenSock).
+- **Só três movimentos**: a passagem do hero, os painéis do Método e o sonar vivo. Nada de títulos
+  crescendo, itens subindo em sequência ou parallax em toda seção. Fora do hero, o conteúdo
+  nunca começa invisível ou apagado.
 - Curva da marca `cubic-bezier(.65,0,.35,1)`, 0,5–0,7 s para entradas.
 - Com "reduzir movimento" ativo: nada fixado, nada escalando, tudo visível de imediato.
 - No celular: sem painéis horizontais; tudo empilha.
@@ -68,3 +80,7 @@ só entram quando a ZENIT fornecer dados reais.
   revelação de texto, lista de serviços interativa, dourado só na luz e na interação.
 - 2026-11-21: feedback de revisão: marca central maior e viva, animação de rolagem que cresce
   (não só diminui), manifesto removido, serviços totalmente visíveis, logo do rodapé inteiro.
+- 2026-11-27: revisão Impeccable: botão visível sob a marca, serviços sem número nem rótulo,
+  acompanhamento em quatro perguntas (sai o painel de exemplo), só três movimentos, limites de
+  tipografia, contraste dos campos, fontes no próprio site, link "pular para o conteúdo", Esc
+  fecha o menu, hover só com mouse, WhatsApp some onde já há contato.
