@@ -13,12 +13,14 @@ e os logos oficiais em `assets/brand/`. Nunca remonte nem recolora o logo; use o
 
 "Do horizonte ao zênite". A página inteira é o céu da marca, com só dois momentos de
 movimento autoral (abertura e rodapé) e o meio calmo, editorial:
-- **Abertura (céu de partículas, `assets/sky.js`)**: o topo é um céu de estrelas desenhado no navegador.
-  Ao abrir, parte das estrelas converge e forma o lockup, a partir da estrela do zênite; a forma é tirada
-  do próprio SVG oficial da página, nas cores dele. No fim, o arquivo oficial entra nítido e as partículas
-  somem: o que fica na tela é sempre o logo oficial. Depois o céu só respira: o mouse afasta as
-  estrelas próximas e um toque/clique solta um pulso de sonar (meios-círculos, um sim um não pontilhado).
-  Rolar, tocar ou usar o teclado durante a montagem pula para o fim. Pausa fora da tela.
+- **Abertura (céu + Sagitário, `assets/sky.js`, ~4 s, pulável)**: o topo é um céu de estrelas desenhado
+  no navegador. A constelação de Sagitário (estrelas reais, posições do céu) se desenha atrás do logo
+  com contas pontilhadas discretas; o arqueiro (arco e flecha, desenho próprio) em dourado-luz. A figura
+  é girada para a flecha mirar o zênite: a flecha dispara até a estrela da marca, há um clarão com um
+  meio-círculo de sonar, a constelação explode e os mesmos pontos formam o lockup (forma tirada do SVG
+  oficial, nas cores dele). No fim entra o arquivo oficial, nítido. Depois o céu só respira: o mouse
+  afasta as estrelas, um toque solta um pulso de sonar. Rolar, tocar ou usar o teclado pula a cena.
+  Nunca copiar arte de terceiros (a referência de "constelação desenhada" veio de um anime protegido).
   Reduzir movimento: céu parado, logo direto.
 - **Hero**: a marca (lockup oficial, inline) é o centro, grande e sem corte. Ela é viva: os anéis
   do sonar acendem do centro para fora e a estrela respira, sem nunca mudar cor nem geometria.
@@ -102,3 +104,5 @@ só entram quando a ZENIT fornecer dados reais.
   só nos momentos da marca, rolagem com ligação direta, reduzir movimento menos radical.
 - 2026-11-27: direção "Do horizonte ao zênite" aprovada. Abertura com céu de partículas que se
   organiza no lockup oficial (referências: Shopify Editions e rodapé de partículas da Oryzo).
+- 2026-11-27: abertura com Sagitário: o arqueiro mira o zênite, a flecha dispara, a constelação
+  explode e vira o logo.
